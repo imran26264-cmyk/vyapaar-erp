@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="hi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>VYAPAAR ERP V2</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#eef3f9;font-family:Arial;color:#111}
+header{background:#1769aa;color:#fff;text-align:center;padding:22px}
+main{max-width:800px;margin:auto;padding:14px}.card{background:#fff;border-radius:24px;padding:20px;margin-bottom:16px}
+h1{margin:0}h2{margin:0 0 18px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+button{width:100%;border:0;border-radius:16px;padding:18px;font-size:18px;font-weight:bold}
+.primary{background:#1769aa;color:#fff}.secondary{background:#e5ebf3}
+.hide{display:none}input,select{width:100%;padding:14px;margin:6px 0 14px;border:1px solid #ccd3dc;border-radius:12px;font-size:17px}
+.row{display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid #ddd}
+@media(max-width:550px){.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header><h1>VYAPAAR ERP V2</h1></header>
+<main>
+
+<section id="home">
+<div class="card"><h2>🏠 Home</h2><div class="grid">
+<button class="primary" onclick="show('entry')">➕ Daily Entry</button>
+<button class="secondary" onclick="show('ledger');renderLedger()">📒 Ledger</button>
+<button class="secondary" onclick="show('cash');renderCash()">💵 Cashbook</button>
+<button class="secondary" onclick="show('upi');renderUPI()">📱 UPI Book</button>
+<button class="secondary" onclick="show('report');renderReport()">📊 Daily Report</button>
+<button class="secondary" onclick="show('parties');renderParties()">👥 Parties</button>
+</div></div>
+<div class="card"><h2>📌 Today's Summary</h2>
+<div class="grid">
+<div>Sales<br><b id="sale">₹0</b></div><div>Purchase<br><b id="purchase">₹0</b></div>
+<div>Jama<br><b id="jama">₹0</b></div><div>Gaya<br><b id="gaya">₹0</b></div>
+</div></div>
+</section>
+
+<section id="entry" class="hide"><button class="secondary" onclick="show('home')">← Home</button>
+<div class="card"><h2>➕ Daily Entry</h2>
+<label>Date</label><input id="date" type="date">
+<label>Party Name</label><input id="party" placeholder="Customer / Supplier">
+<label>Entry Type</label><select id="type">
+<option value="sale">Sale</option><option value="purchase">Purchase</option>
+<option value="jama">Jama (Received)</option><option value="gaya">Gaya (Paid)</option>
+</select>
+<label>Amount ₹</label><input id="amount" type="number">
+<label>Payment Mode</label><select id="mode"><option>cash</option><option>upi</option><option>credit</option></select>
+<label>Remark</label><input id="remark">
+<button class="primary" onclick="saveEntry()">💾 Save Entry</button>
+</div></section>
+
+<section id="ledger" class="hide"><button class="secondary" onclick="show('home')">← Home</button>
+<div class="card"><h2>📒 Ledger</h2><input id="search" placeholder="🔎 Search Party" oninput="renderLedger()"><div id="ledgerOut"></div></div></section>
+
+<section id="cash" class="hide"><button class="secondary" onclick="show('home')">← Home</button>
+<div class="card"><h2>💵 Cashbook</h2><div id="cashOut"></div></div></section>
+
+<section id="upi" class="hide"><button class="secondary" onclick="show('home')">← Home</button>
+<div class="card"><h2>📱 UPI Book</h2><div id="upiOut"></div></div></section>
+
+<section id="report" class="hide"><button class="secondary" onclick="show('home')">← Home</button>
+<div class="card"><h2>📊 Daily Report</h2><input id="rdate" type="date" onchange="renderReport()"><div id="reportOut"></div></div></section>
+
+<section id="parties" class="hide"><button class="secondary" onclick="show('home')">← Home</button>
+<div class="card"><h2>👥 Parties</h2><div id="partyOut"></div></div></section>
+
+</main>
+<script>
+const KEY='vyapaar_erp_v2_data';
+let data=JSON.parse(localStorage.getItem(KEY)||'[]');
+const $=id=>document.getElementById(id);
+const today=()=>new Date().toISOString().slice(0,10);
+const money=n=>'₹'+Number(n||0).toLocaleString('en-IN');
+
+function show(id){
+ document.querySelectorAll('main>section').forEach(x=>x.classList.add('hide'));
+ $(id).classList.remove('hide'); window.scrollTo(0,0);
+}
+function esc(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));}
+function totals(a){
+ return {
+ sale:a.filter(x=>x.type==='sale').reduce((s,x)=>s+x.amount,0),
+ purchase:a.filter(x=>x.type==='purchase').reduce((s,x)=>s+x.amount,0),
+ jama:a.filter(x=>x.type==='jama').reduce((s,x)=>s+x.amount,0),
+ gaya:a.filter(x=>x.type==='gaya').reduce((s,x)=>s+x.amount,0)
+ };
+}
+function home(){
+ let t=totals(data.filter(x=>x.date===today()));
+ $('sale').textContent=money(t.sale);$('purchase').textContent=money(t.purchase);
+ $('jama').textContent=money(t.jama);$('gaya').textContent=money(t.gaya);
+}
+function saveEntry(){
+ let p=$('party').value.trim(),a=Number($('amount').value);
+ if(!p)return alert('Party Name डालें');
+ if(a<=0)return alert('Amount डालें');
+ data.push({date:$('date').value||today(),party:p,type:$('type').value,amount:a,mode:$('mode').value,remark:$('remark').value});
+ localStorage.setItem(KEY,JSON.stringify(data));
+ alert('Entry Saved ✅');$('party').value='';$('amount').value='';$('remark').value='';home();
+}
+function renderLedger(){
+ let q=($('search').value||'').toLowerCase();
+ let ps=[...new Set(data.map(x=>x.party))].filter(p=>p.toLowerCase().includes(q)).sort();
+ $('ledgerOut').innerHTML=ps.length?ps.map(p=>{
+  let t=totals(data.filter(x=>x.party===p)),b=t.sale+t.gaya-t.purchase-t.jama;
+  return '<div class="card"><h3>'+esc(p)+'</h3>'+
+  '<div class="row"><span>Sale</span><b>'+money(t.sale)+'</b></div>'+
+  '<div class="row"><span>Purchase</span><b>'+money(t.purchase)+'</b></div>'+
+  '<div class="row"><span>Jama</span><b>'+money(t.jama)+'</b></div>'+
+  '<div class="row"><span>Gaya</span><b>'+money(t.gaya)+'</b></div>'+
+  '<div class="row"><b>Balance</b><b>'+money(Math.abs(b))+' '+(b>0?'Dr':b<0?'Cr':'')+'</b></div></div>';
+ }).join(''):'<p>No ledger entries</p>';
+}
+function renderCash(){
+ let a=data.filter(x=>x.mode==='cash'),tIn=a.filter(x=>x.type==='sale'||x.type==='jama').reduce((s,x)=>s+x.amount,0),tOut=a.filter(x=>x.type==='purchase'||x.type==='gaya').reduce((s,x)=>s+x.amount,0);
+ $('cashOut').innerHTML='<div class="row"><span>Cash In</span><b>'+money(tIn)+'</b></div><div class="row"><span>Cash Out</span><b>'+money(tOut)+'</b></div><div class="row"><b>Balance</b><b>'+money(tIn-tOut)+'</b></div>'+
+ a.slice().reverse().map(x=>'<div class="row"><span>'+esc(x.date)+'<br>'+esc(x.party)+'</span><b>'+money(x.amount)+'</b></div>').join('');
+}
+function renderUPI(){
+ let a=data.filter(x=>x.mode==='upi'),tIn=a.filter(x=>x.type==='sale'||x.type==='jama').reduce((s,x)=>s+x.amount,0),tOut=a.filter(x=>x.type==='purchase'||x.type==='gaya').reduce((s,x)=>s+x.amount,0);
+ $('upiOut').innerHTML='<div class="row"><span>UPI In</span><b>'+money(tIn)+'</b></div><div class="row"><span>UPI Out</span><b>'+money(tOut)+'</b></div><div class="row"><b>Balance</b><b>'+money(tIn-tOut)+'</b></div>'+
+ a.slice().reverse().map(x=>'<div class="row"><span>'+esc(x.date)+'<br>'+esc(x.party)+'</span><b>'+money(x.amount)+'</b></div>').join('');
+}
+function renderReport(){
+ let d=$('rdate').value||today(),a=data.filter(x=>x.date===d),t=totals(a);
+ $('reportOut').innerHTML='<div class="row"><span>Sale</span><b>'+money(t.sale)+'</b></div><div class="row"><span>Purchase</span><b>'+money(t.purchase)+'</b></div><div class="row"><span>Jama</span><b>'+money(t.jama)+'</b></div><div class="row"><span>Gaya</span><b>'+money(t.gaya)+'</b></div><h3>Entries: '+a.length+'</h3>'+
+ a.slice().reverse().map(x=>'<div class="row"><span>'+esc(x.party)+'<br>'+x.type+' • '+x.mode+'</span><b>'+money(x.amount)+'</b></div>').join('');
+}
+function renderParties(){
+ let ps=[...new Set(data.map(x=>x.party))].sort();
+ $('partyOut').innerHTML=ps.length?ps.map(p=>'<div class="row"><b>'+esc(p)+'</b><span>'+data.filter(x=>x.party===p).length+' entries</span></div>').join(''):'<p>No parties yet.</p>';
+}
+$('date').value=today();$('rdate').value=today();home();
+</script>
+</body></html>
