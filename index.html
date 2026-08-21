@@ -1,51 +1,312 @@
-<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Vyapaar ERP</title>
-<style>
-body{margin:0;font-family:Arial;background:#f3f6fa;color:#172033}header{background:#1769aa;color:#fff;text-align:center;padding:18px;font-size:24px;font-weight:bold}
-main{max-width:650px;margin:auto;padding:15px}.card{background:#fff;padding:18px;border-radius:15px;margin:12px 0;box-shadow:0 2px 10px #0002}
-button{padding:14px;border:0;border-radius:10px;font-weight:bold;font-size:16px}.primary{background:#1769aa;color:#fff}.green{background:#16834a;color:#fff}.gray{background:#e5eaf0}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}input,select{width:100%;padding:13px;border:1px solid #ccd4df;border-radius:9px;font-size:16px;box-sizing:border-box}label{font-weight:bold;display:block;margin:12px 0 5px}.row{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #eee}.hidden{display:none}.muted{color:#667085}
-</style><link rel="manifest" href="manifest.json">
+<!doctype html>
+<html lang="hi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#1769aa">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<script>
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => navigator.serviceWorker.register('sw.js'));
+<title>VYAPAAR ERP V2</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f1f5f9;color:#172033}
+header{background:#1769aa;color:#fff;text-align:center;padding:22px 10px;font-size:30px;font-weight:800}
+main{max-width:760px;margin:auto;padding:18px}
+.card{background:#fff;border-radius:24px;padding:24px;margin-bottom:18px;box-shadow:0 6px 22px #00000012}
+h2{margin:0 0 22px;font-size:28px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+button{border:0;border-radius:14px;padding:15px 18px;font-size:17px;font-weight:700}
+.primary{background:#1769aa;color:white}
+.green{background:#168a4b;color:white}
+.gray{background:#e5ebf2;color:#111}
+.red{background:#d93025;color:white}
+.full{width:100%}
+label{display:block;font-size:17px;font-weight:700;margin:14px 0 7px}
+input,select{width:100%;padding:15px;border:2px solid #d5dbe3;border-radius:14px;font-size:18px;background:#fff}
+input:focus,select:focus{outline:0;border-color:#1769aa}
+.row{display:flex;justify-content:space-between;gap:12px;padding:14px 0;border-bottom:1px solid #e5e7eb;font-size:17px}
+.muted{color:#687385}
+.hidden{display:none}
+.stat{background:#f5f8fb;border-radius:16px;padding:15px}
+.stat b{display:block;font-size:22px;margin-top:5px}
+.success{color:#168a4b;font-weight:700;margin-top:12px}
+.danger{color:#d93025}
+.txn{padding:14px 0;border-bottom:1px solid #e5e7eb}
+.txnTop{display:flex;justify-content:space-between;font-weight:700}
+.txnSub{font-size:14px;color:#687385;margin-top:5px}
+.actions{display:flex;gap:8px;margin-top:9px}
+.actions button{padding:8px 11px;font-size:13px}
+@media(max-width:520px){
+main{padding:12px}.card{padding:19px}header{font-size:25px}
 }
-</script>
-</head><body><header>VYAPAAR ERP</header><main>
-<section id="home" class="card"><h2>🏠 Home</h2><div class="grid">
-<button class="primary" onclick="page('entry')">➕ Daily Entry</button><button class="gray" onclick="page('ledger')">📒 Ledger</button>
-<button class="gray" onclick="page('cash')">💵 Cash</button><button class="gray" onclick="page('upi')">📱 UPI</button>
-<button class="gray" onclick="page('report')">📊 Daily Report</button><button class="gray" onclick="page('parties')">👥 Parties</button>
-</div></section>
+</style>
+</head>
 
-<section id="entry" class="card hidden"><h2>➕ Daily Entry</h2>
-<label>Party Name</label><input id="party" placeholder="Ramesh">
-<label>Entry</label><select id="type"><option value="sale">Sale</option><option value="purchase">Purchase</option><option value="jama">Jama (पैसा मिला)</option><option value="gaya">Gaya (पैसा दिया)</option></select>
-<label>Mode</label><select id="mode"><option>Cash</option><option>UPI</option><option>Bank</option></select>
-<label>Amount</label><input id="amount" type="number" placeholder="0">
-<label>Remark</label><input id="remark" placeholder="Optional">
-<br><br><button class="green" onclick="saveEntry()">💾 SAVE</button> <button class="gray" onclick="page('home')">HOME</button>
-<p id="msg"></p></section>
+<body>
+<header>VYAPAAR ERP V2</header>
 
-<section id="ledger" class="card hidden"><h2>📒 Party Ledger</h2><input id="search" placeholder="नाम लिखें" oninput="renderLedger()"><div id="ledgerOut"></div><button class="gray" onclick="page('home')">HOME</button></section>
-<section id="cash" class="card hidden"><h2>💵 Cash Book</h2><div id="cashOut"></div><button class="gray" onclick="page('home')">HOME</button></section>
-<section id="upi" class="card hidden"><h2>📱 UPI Book</h2><div id="upiOut"></div><button class="gray" onclick="page('home')">HOME</button></section>
-<section id="report" class="card hidden"><h2>📊 Daily Report</h2><div id="reportOut"></div><button class="gray" onclick="page('home')">HOME</button></section>
-<section id="parties" class="card hidden"><h2>👥 Parties</h2><div id="partyOut"></div><button class="gray" onclick="page('home')">HOME</button></section>
+<main>
+
+<section id="home" class="card">
+<h2>🏠 Home</h2>
+<div class="grid">
+<button class="primary" onclick="page('entry')">➕ Daily Entry</button>
+<button class="gray" onclick="page('ledger')">📒 Ledger</button>
+<button class="gray" onclick="page('cash')">💵 Cashbook</button>
+<button class="gray" onclick="page('upi')">📱 UPI Book</button>
+<button class="gray" onclick="page('report')">📊 Daily Report</button>
+<button class="gray" onclick="page('parties')">👥 Parties</button>
+</div>
+</section>
+
+<section id="entry" class="card hidden">
+<h2>➕ Daily Entry</h2>
+
+<label>Date</label>
+<input id="date" type="date">
+
+<label>Party Name</label>
+<input id="party" placeholder="Party name">
+
+<label>Entry</label>
+<select id="type">
+<option value="sale">Sale</option>
+<option value="purchase">Purchase</option>
+<option value="jama">Jama (Received)</option>
+<option value="gaya">Gaya (Paid)</option>
+</select>
+
+<label>Mode</label>
+<select id="mode">
+<option>Cash</option>
+<option>UPI</option>
+</select>
+
+<label>Amount</label>
+<input id="amount" type="number" inputmode="decimal" min="0" step="0.01" placeholder="0">
+
+<label>Remark</label>
+<input id="remark" placeholder="Optional">
+
+<br><br>
+
+<div class="grid">
+<button class="green" onclick="saveEntry()">💾 SAVE</button>
+<button class="gray" onclick="page('home')">HOME</button>
+</div>
+
+<p id="msg"></p>
+</section>
+
+<section id="ledger" class="card hidden">
+<h2>📒 Ledger</h2>
+<label>Search Party</label>
+<input id="ledgerSearch" placeholder="Party name" oninput="renderLedger()">
+<div id="ledgerOut"></div>
+<button class="gray full" onclick="page('home')">HOME</button>
+</section>
+
+<section id="cash" class="card hidden">
+<h2>💵 Cashbook</h2>
+<div id="cashStats"></div>
+<div id="cashOut"></div>
+<button class="gray full" onclick="page('home')">HOME</button>
+</section>
+
+<section id="upi" class="card hidden">
+<h2>📱 UPI Book</h2>
+<div id="upiStats"></div>
+<div id="upiOut"></div>
+<button class="gray full" onclick="page('home')">HOME</button>
+</section>
+
+<section id="report" class="card hidden">
+<h2>📊 Daily Report</h2>
+<label>Date</label>
+<input id="reportDate" type="date" onchange="renderReport()">
+<div id="reportOut"></div>
+<h3>Transactions</h3>
+<div id="reportTxns"></div>
+<button class="gray full" onclick="page('home')">HOME</button>
+</section>
+
+<section id="parties" class="card hidden">
+<h2>👥 Parties</h2>
+<label>Search Party</label>
+<input id="partySearch" placeholder="Search party" oninput="renderParties()">
+<div id="partyOut"></div>
+<button class="gray full" onclick="page('home')">HOME</button>
+</section>
+
 </main>
+
 <script>
-let data=JSON.parse(localStorage.getItem('vyapaarData')||'[]');
-const money=n=>'₹ '+Number(n||0).toLocaleString('en-IN');
-function save(){localStorage.setItem('vyapaarData',JSON.stringify(data))}
-function page(id){document.querySelectorAll('section').forEach(x=>x.classList.add('hidden'));document.getElementById(id).classList.remove('hidden');renderAll()}
-function saveEntry(){let p=party.value.trim(),a=+amount.value;if(!p||!a){msg.textContent='Party और Amount भरें';return}
-data.push({date:new Date().toLocaleDateString('en-IN'),party:p,type:type.value,mode:mode.value,amount:a,remark:remark.value});save();msg.textContent='✓ Entry Saved';amount.value='';remark.value='';renderAll()}
-function bal(p){return data.filter(x=>x.party.toLowerCase()==p.toLowerCase()).reduce((b,x)=>b+(x.type=='sale'?x.amount:x.type=='jama'?-x.amount:x.type=='purchase'?-x.amount:-x.amount),0)}
-function renderLedger(){let q=(document.getElementById('search')?.value||'').toLowerCase(),ps=[...new Set(data.map(x=>x.party))].filter(p=>p.toLowerCase().includes(q));ledgerOut.innerHTML=ps.map(p=>'<div class="card"><b>'+p+'</b><div class="row"><span>Balance</span><b>'+money(Math.abs(bal(p)))+' '+(bal(p)>=0?'बाकी':'Advance')+'</b></div>'+data.filter(x=>x.party==p).map(x=>'<div class="row"><span>'+x.date+' · '+x.type+' · '+x.mode+'</span><span>'+money(x.amount)+'</span></div>').join('')+'</div>').join('')||'<p class="muted">कोई entry नहीं</p>'}
-function book(mode,id){let a=data.filter(x=>x.mode==mode).reduce((s,x)=>s+((x.type=='sale'||x.type=='jama')?x.amount:-x.amount),0);document.getElementById(id).innerHTML='<div class="row"><span>Balance</span><b>'+money(a)+'</b></div>'+data.filter(x=>x.mode==mode).map(x=>'<div class="row"><span>'+x.date+' · '+x.party+' · '+x.type+'</span><span>'+money(x.amount)+'</span></div>').join('')}
-function renderAll(){renderLedger();book('Cash','cashOut');book('UPI','upiOut');let s=t='';let sale=data.filter(x=>x.type=='sale').reduce((a,x)=>a+x.amount,0),pur=data.filter(x=>x.type=='purchase').reduce((a,x)=>a+x.amount,0),jama=data.filter(x=>x.type=='jama').reduce((a,x)=>a+x.amount,0),gaya=data.filter(x=>x.type=='gaya').reduce((a,x)=>a+x.amount,0);reportOut.innerHTML='<div class="row"><span>Sale</span><b>'+money(sale)+'</b></div><div class="row"><span>Purchase</span><b>'+money(pur)+'</b></div><div class="row"><span>Jama</span><b>'+money(jama)+'</b></div><div class="row"><span>Gaya</span><b>'+money(gaya)+'</b></div>';let ps=[...new Set(data.map(x=>x.party))];partyOut.innerHTML=ps.map(p=>'<div class="row"><span>'+p+'</span><b>'+money(Math.abs(bal(p)))+'</b></div>').join('')||'<p class="muted">अभी कोई party नहीं</p>'}
-page('home');
-</script></body></html>
+const KEY='vyapaarDataV2';
+let data=JSON.parse(localStorage.getItem(KEY)||'[]');
+
+const $=id=>document.getElementById(id);
+
+const money=n=>'₹ '+Number(n||0).toLocaleString('en-IN',{
+minimumFractionDigits:2,
+maximumFractionDigits:2
+});
+
+function today(){
+const d=new Date();
+const z=n=>String(n).padStart(2,'0');
+return d.getFullYear()+'-'+z(d.getMonth()+1)+'-'+z(d.getDate());
+}
+
+$('date').value=today();
+$('reportDate').value=today();
+
+function save(){
+localStorage.setItem(KEY,JSON.stringify(data));
+}
+
+function page(id){
+document.querySelectorAll('section').forEach(s=>s.classList.add('hidden'));
+$(id).classList.remove('hidden');
+renderAll();
+window.scrollTo(0,0);
+}
+
+function saveEntry(){
+
+const p=$('party').value.trim();
+const a=Number($('amount').value);
+
+if(!p || !a){
+$('msg').textContent='⚠️ Party और Amount भरें';
+$('msg').className='danger';
+return;
+}
+
+data.push({
+id:Date.now(),
+date:$('date').value||today(),
+party:p,
+type:$('type').value,
+mode:$('mode').value,
+amount:a,
+remark:$('remark').value.trim()
+});
+
+save();
+
+$('msg').textContent='✓ Entry Saved';
+$('msg').className='success';
+
+$('amount').value='';
+$('remark').value='';
+
+renderAll();
+}
+
+function typeName(t){
+return {
+sale:'Sale',
+purchase:'Purchase',
+jama:'Jama',
+gaya:'Gaya'
+}[t]||t;
+}
+
+function signAmount(x){
+return (x.type==='sale'||x.type==='jama')
+?x.amount
+:-x.amount;
+}
+
+function partyBalance(p){
+return data
+.filter(x=>x.party.toLowerCase()===p.toLowerCase())
+.reduce((s,x)=>s+signAmount(x),0);
+}
+
+function fmtDate(d){
+if(!d)return '';
+const a=d.split('-');
+return a[2]+'/'+a[1]+'/'+a[0];
+}
+
+function escapeHtml(s){
+return String(s).replace(/[&<>"']/g,c=>({
+'&':'&amp;',
+'<':'&lt;',
+'>':'&gt;',
+'"':'&quot;',
+"'":'&#039;'
+}[c]));
+}
+
+function transactions(list){
+
+if(!list.length)
+return '<p class="muted">अभी कोई entry नहीं</p>';
+
+return list.slice().reverse().map(x=>`
+<div class="txn">
+<div class="txnTop">
+<span>${escapeHtml(x.party)}</span>
+<span>${money(x.amount)}</span>
+</div>
+
+<div class="txnSub">
+${fmtDate(x.date)} • ${typeName(x.type)} • ${x.mode}
+${x.remark?' • '+escapeHtml(x.remark):''}
+</div>
+
+<div class="actions">
+<button class="red" onclick="deleteEntry(${x.id})">
+Delete
+</button>
+</div>
+</div>
+`).join('');
+}
+
+function deleteEntry(id){
+
+if(!confirm('यह entry delete करें?'))return;
+
+data=data.filter(x=>x.id!==id);
+
+save();
+renderAll();
+}
+
+function totals(list){
+
+return {
+sale:list.filter(x=>x.type==='sale')
+.reduce((s,x)=>s+x.amount,0),
+
+purchase:list.filter(x=>x.type==='purchase')
+.reduce((s,x)=>s+x.amount,0),
+
+jama:list.filter(x=>x.type==='jama')
+.reduce((s,x)=>s+x.amount,0),
+
+gaya:list.filter(x=>x.type==='gaya')
+.reduce((s,x)=>s+x.amount,0)
+};
+}
+
+function renderLedger(){
+
+const q=($('ledgerSearch').value||'')
+.toLowerCase().trim();
+
+const ps=[...new Set(data.map(x=>x.party))]
+.filter(p=>p.toLowerCase().includes(q))
+.sort();
+
+$('ledgerOut').innerHTML=ps.length
+?ps.map(p=>{
+
+const b=partyBalance(p);
+
+return `
+<div class="row">
+<span>${escapeHtml(p)}</span>
+<b class="${b<0?'danger':''}">
+${money
