@@ -1,114 +1,70 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="hi">
 <head>
-<meta charset="utf-8">
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#1769aa">
-<title>VYAPAAR ERP V2</title>
+<title>VYAPAAR ERP V3</title>
 
 <style>
 *{box-sizing:border-box}
 body{
- margin:0;
- background:#eef3f9;
- color:#101418;
+ margin:0;background:#eef3f9;color:#17202a;
  font-family:Arial,sans-serif
 }
 header{
- background:#1769aa;
- color:#fff;
- padding:18px;
- text-align:center;
- position:sticky;
- top:0;
- z-index:5
+ background:#1769aa;color:white;padding:18px;
+ text-align:center;position:sticky;top:0;z-index:10
 }
-header h1{margin:0;font-size:28px}
+header h1{margin:0;font-size:25px}
 main{max-width:900px;margin:auto;padding:14px}
 .card{
- background:#fff;
- border-radius:22px;
- padding:18px;
- margin-bottom:14px;
- box-shadow:0 4px 16px #0001
+ background:white;border-radius:20px;padding:17px;
+ margin-bottom:14px;box-shadow:0 3px 15px #0002
 }
-h2{margin:0 0 16px}
-.grid,.menu{
- display:grid;
- grid-template-columns:1fr 1fr;
- gap:12px
+h2{margin:0 0 15px}
+.menu,.grid{
+ display:grid;grid-template-columns:1fr 1fr;gap:11px
 }
 button{
- border:0;
- border-radius:15px;
- padding:14px;
- font-size:16px;
- font-weight:700;
- cursor:pointer
+ width:100%;border:0;border-radius:14px;
+ padding:14px;font-size:16px;font-weight:bold
 }
 .primary{background:#1769aa;color:white}
-.secondary{background:#e4ebf3}
+.secondary{background:#e5edf5;color:#17202a}
 .success{background:#168a4b;color:white}
 .danger{background:#d9534f;color:white}
 .hide{display:none!important}
-label{
- display:block;
- font-weight:bold;
- margin-top:8px
-}
+label{font-weight:bold;display:block;margin-top:8px}
 input,select{
- width:100%;
- padding:13px;
- margin:6px 0 12px;
- border:1px solid #cbd4df;
- border-radius:12px;
- font-size:16px
+ width:100%;padding:13px;margin:6px 0 12px;
+ border:1px solid #c8d2dd;border-radius:12px;
+ font-size:16px;background:white
 }
 .row{
- display:flex;
- justify-content:space-between;
- gap:10px;
- padding:11px 0;
- border-bottom:1px solid #e1e5e9
+ display:flex;justify-content:space-between;
+ gap:10px;padding:12px 0;
+ border-bottom:1px solid #e2e6ea
 }
 .stat{
- background:#f4f7fa;
- border-radius:16px;
- padding:14px
+ background:#f3f7fa;border-radius:15px;padding:14px
 }
-.stat b{
- display:block;
- font-size:20px;
- margin-top:5px
-}
+.stat b{display:block;font-size:20px;margin-top:5px}
 .badge{
- display:inline-block;
- background:#e5ebf3;
- border-radius:20px;
- padding:5px 9px;
- font-size:12px
+ display:inline-block;padding:5px 9px;
+ border-radius:20px;background:#e5edf5;font-size:12px
 }
-.small{
- padding:7px 10px;
- font-size:13px
-}
-.in{color:#168a4b}
-.out{color:#d9534f}
-.credit{color:#1769aa}
-.debit{color:#d9534f}
-.empty{
- text-align:center;
- color:#777;
- padding:25px
-}
-.total{
- font-size:21px;
- font-weight:bold
-}
+.in{color:#168a4b}.out{color:#d9534f}
+.small{width:auto;padding:7px 10px;font-size:13px}
+.empty{text-align:center;color:#777;padding:25px}
+.total{font-size:21px}
 .nav{margin-bottom:12px}
-
+.notice{
+ padding:12px;border-radius:12px;
+ background:#fff5d6;margin-bottom:12px
+}
 @media(max-width:550px){
- .grid,.menu{grid-template-columns:1fr}
+ .menu,.grid{grid-template-columns:1fr}
 }
 </style>
 </head>
@@ -116,7 +72,7 @@ input,select{
 <body>
 
 <header>
-<h1>VYAPAAR ERP V2</h1>
+<h1>VYAPAAR ERP V3</h1>
 </header>
 
 <main>
@@ -128,149 +84,82 @@ input,select{
 <h2>🏠 Home</h2>
 
 <div class="menu">
-
-<button class="primary" onclick="go('entry')">
-➕ Daily Entry
-</button>
-
-<button class="secondary" onclick="go('ledger');ledger()">
-📒 Ledger
-</button>
-
-<button class="secondary" onclick="go('cash');cash()">
-💵 Cashbook
-</button>
-
-<button class="secondary" onclick="go('upi');book('upi')">
-📱 UPI Book
-</button>
-
-<button class="secondary" onclick="go('bank');book('bank')">
-🏦 Bank Book
-</button>
-
-<button class="secondary" onclick="go('report');report()">
-📊 Daily Report
-</button>
-
-<button class="secondary" onclick="go('parties');parties()">
-👥 Parties
-</button>
-
-<button class="secondary" onclick="go('settings')">
-⚙️ Settings
-</button>
-
+<button class="primary" onclick="show('entry')">➕ Daily Entry</button>
+<button class="secondary" onclick="show('ledger');renderLedger()">📒 Ledger</button>
+<button class="secondary" onclick="show('cash');renderCash()">💵 Cashbook</button>
+<button class="secondary" onclick="show('upi');renderBook('upi')">📱 UPI Book</button>
+<button class="secondary" onclick="show('bank');renderBook('bank')">🏦 Bank Book</button>
+<button class="secondary" onclick="show('report');renderReport()">📊 Daily Report</button>
+<button class="secondary" onclick="show('parties');renderParties()">👥 Parties</button>
+<button class="secondary" onclick="show('settings')">⚙️ Settings</button>
 </div>
 </div>
 
 <div class="card">
-
 <h2>📌 Today's Summary</h2>
 
 <div class="grid">
-
-<div class="stat">
-Sales
-<b id="sale">₹0</b>
+<div class="stat">Sale<b id="hsale">₹0</b></div>
+<div class="stat">Purchase<b id="hpurchase">₹0</b></div>
+<div class="stat">Jama / Received<b id="hjama">₹0</b></div>
+<div class="stat">Gaya / Paid<b id="hgaya">₹0</b></div>
 </div>
-
-<div class="stat">
-Purchase
-<b id="purchase">₹0</b>
-</div>
-
-<div class="stat">
-Jama / Received
-<b id="jama">₹0</b>
-</div>
-
-<div class="stat">
-Gaya / Paid
-<b id="gaya">₹0</b>
-</div>
-
-</div>
-
-<div class="row">
-<b>Today's Balance</b>
-<b id="todayBal">₹0</b>
-</div>
-
 </div>
 
 </section>
 
 
-<!-- DAILY ENTRY -->
+<!-- ENTRY -->
 <section id="entry" class="hide">
 
 <div class="nav">
-<button class="secondary" onclick="go('home')">
-← Home
-</button>
+<button class="secondary" onclick="show('home')">← Home</button>
 </div>
 
 <div class="card">
 
 <h2>➕ Daily Entry</h2>
 
+<div class="notice">
+<b>Customer:</b> Sale = Credit | Paisa Received = Debit
+<br>
+<b>Supplier:</b> Purchase = Debit | Paisa Paid = Credit
+</div>
+
 <label>Date</label>
 <input id="date" type="date">
 
 <label>Party Type</label>
-
-<select id="ptype" onchange="entryTypes()">
+<select id="ptype" onchange="setEntryTypes()">
 <option value="customer">Customer</option>
 <option value="supplier">Supplier</option>
 </select>
 
 <label>Party Name</label>
-
-<input
- id="party"
- list="plist"
- placeholder="Customer / Supplier name">
-
-<datalist id="plist"></datalist>
+<input id="party" list="partyList"
+placeholder="Customer / Supplier name">
+<datalist id="partyList"></datalist>
 
 <label>Entry Type</label>
-
 <select id="etype"></select>
 
 <label>Amount ₹</label>
-
-<input
- id="amount"
- type="number"
- inputmode="decimal"
- min="0">
+<input id="amount" type="number" min="0" inputmode="decimal">
 
 <label>Payment Mode</label>
-
 <select id="mode">
-<option value="cash">Cash</option>
-<option value="upi">UPI</option>
-<option value="bank">Bank</option>
-<option value="credit">Credit / Udhaar</option>
+<option value="cash">💵 Cash</option>
+<option value="upi">📱 UPI</option>
+<option value="bank">🏦 Bank</option>
+<option value="credit">📒 Credit / Udhaar</option>
 </select>
 
-<label>Particular</label>
-
-<input
- id="remark"
- placeholder="Particular">
+<label>Remark</label>
+<input id="remark" placeholder="Optional">
 
 <div class="grid">
-
-<button class="primary" onclick="add()">
-💾 Save Entry
-</button>
-
-<button class="secondary" onclick="clearForm()">
-↻ Clear
-</button>
-
+<button class="primary" onclick="addEntry()">💾 Save Entry</button>
+<button class="secondary" onclick="clearEntry()">↻ Clear</button>
 </div>
 
 </div>
@@ -281,75 +170,53 @@ Gaya / Paid
 <section id="ledger" class="hide">
 
 <div class="nav">
-<button class="secondary" onclick="go('home')">
-← Home
-</button>
+<button class="secondary" onclick="show('home')">← Home</button>
 </div>
 
 <div class="card">
+<h2>📒 Party Ledger</h2>
 
-<h2>📒 Ledger</h2>
+<input id="ledgerSearch"
+placeholder="🔎 Search Party"
+oninput="renderLedger()">
 
-<input
- id="search"
- placeholder="🔎 Search Party"
- oninput="ledger()">
-
-<div id="ledgerOut"></div>
-
+<div id="ledgerList"></div>
 </div>
+
 </section>
 
 
-<!-- PARTY DETAIL -->
+<!-- DETAIL -->
 <section id="detail" class="hide">
 
 <div class="nav">
-
-<button
- class="secondary"
- onclick="go('ledger');ledger()">
-← Ledger
-</button>
-
+<button class="secondary" onclick="show('ledger');renderLedger()">← Ledger</button>
 </div>
 
 <div class="card">
-
-<h2 id="detailTitle">
-Party Ledger
-</h2>
-
-<div id="detailOut"></div>
-
+<h2 id="detailTitle">Party Ledger</h2>
+<div id="detailList"></div>
 </div>
 
 </section>
 
 
-<!-- CASHBOOK -->
+<!-- CASH -->
 <section id="cash" class="hide">
 
 <div class="nav">
-<button class="secondary" onclick="go('home')">
-← Home
-</button>
+<button class="secondary" onclick="show('home')">← Home</button>
 </div>
 
 <div class="card">
-
 <h2>💵 Cashbook</h2>
 
 <label>Date</label>
+<input id="cashDate" type="date" onchange="renderCash()">
 
-<input
- id="cashDate"
- type="date"
- onchange="cash()">
-
-<div id="cashOut"></div>
-
+<div id="cashList"></div>
 </div>
+
 </section>
 
 
@@ -357,18 +224,14 @@ Party Ledger
 <section id="upi" class="hide">
 
 <div class="nav">
-<button class="secondary" onclick="go('home')">
-← Home
-</button>
+<button class="secondary" onclick="show('home')">← Home</button>
 </div>
 
 <div class="card">
-
 <h2>📱 UPI Book</h2>
-
-<div id="upiOut"></div>
-
+<div id="upiList"></div>
 </div>
+
 </section>
 
 
@@ -376,44 +239,33 @@ Party Ledger
 <section id="bank" class="hide">
 
 <div class="nav">
-<button class="secondary" onclick="go('home')">
-← Home
-</button>
+<button class="secondary" onclick="show('home')">← Home</button>
 </div>
 
 <div class="card">
-
 <h2>🏦 Bank Book</h2>
-
-<div id="bankOut"></div>
-
+<div id="bankList"></div>
 </div>
+
 </section>
 
 
-<!-- DAILY REPORT -->
+<!-- REPORT -->
 <section id="report" class="hide">
 
 <div class="nav">
-<button class="secondary" onclick="go('home')">
-← Home
-</button>
+<button class="secondary" onclick="show('home')">← Home</button>
 </div>
 
 <div class="card">
-
 <h2>📊 Daily Report</h2>
 
 <label>Date</label>
+<input id="reportDate" type="date" onchange="renderReport()">
 
-<input
- id="rdate"
- type="date"
- onchange="report()">
-
-<div id="reportOut"></div>
-
+<div id="reportList"></div>
 </div>
+
 </section>
 
 
@@ -421,18 +273,14 @@ Party Ledger
 <section id="parties" class="hide">
 
 <div class="nav">
-<button class="secondary" onclick="go('home')">
-← Home
-</button>
+<button class="secondary" onclick="show('home')">← Home</button>
 </div>
 
 <div class="card">
-
 <h2>👥 Parties</h2>
-
-<div id="partyOut"></div>
-
+<div id="partiesList"></div>
 </div>
+
 </section>
 
 
@@ -440,45 +288,37 @@ Party Ledger
 <section id="settings" class="hide">
 
 <div class="nav">
-<button class="secondary" onclick="go('home')">
-← Home
-</button>
+<button class="secondary" onclick="show('home')">← Home</button>
 </div>
 
 <div class="card">
-
 <h2>⚙️ Settings</h2>
 
-<p>
-Edit/Delete ke liye PIN required hai.
-</p>
+<p>Edit और Delete के लिए PIN required है.</p>
 
 <label>New PIN</label>
+<input id="newPin" type="password" maxlength="6"
+inputmode="numeric">
 
-<input
- id="newpin"
- type="password"
- maxlength="6"
- inputmode="numeric">
-
-<button
- class="primary"
- onclick="changePin()">
+<button class="primary" onclick="changePin()">
 🔐 Change PIN
 </button>
-
 </div>
 
 <div class="card">
+<h2>📦 Backup</h2>
 
-<h3>📦 Backup</h3>
-
-<button
- class="secondary"
- onclick="backup()">
+<button class="secondary" onclick="backupData()">
 ⬇️ Download Backup
 </button>
+</div>
 
+<div class="card">
+<h2>🗑️ Data</h2>
+
+<button class="danger" onclick="clearAllData()">
+Delete All Data
+</button>
 </div>
 
 </section>
@@ -488,55 +328,48 @@ Edit/Delete ke liye PIN required hai.
 <section id="edit" class="hide">
 
 <div class="nav">
-
-<button
- class="secondary"
- onclick="go('ledger');ledger()">
-← Ledger
+<button class="secondary"
+onclick="show('detail')">
+← Back
 </button>
-
 </div>
 
 <div class="card">
 
 <h2>✏️ Edit Entry</h2>
 
-<input id="eid" type="hidden">
+<input id="editId" type="hidden">
 
 <label>Date</label>
-<input id="edate" type="date">
+<input id="editDate" type="date">
 
 <label>Party Type</label>
-
-<select id="eptype" onchange="editTypes()">
+<select id="editPtype" onchange="setEditTypes()">
 <option value="customer">Customer</option>
 <option value="supplier">Supplier</option>
 </select>
 
 <label>Party</label>
-<input id="eparty">
+<input id="editParty">
 
 <label>Entry Type</label>
-<select id="eetype"></select>
+<select id="editType"></select>
 
-<label>Amount</label>
-<input id="eamount" type="number">
+<label>Amount ₹</label>
+<input id="editAmount" type="number">
 
-<label>Mode</label>
-
-<select id="emode">
-<option value="cash">Cash</option>
-<option value="upi">UPI</option>
-<option value="bank">Bank</option>
-<option value="credit">Credit / Udhaar</option>
+<label>Payment Mode</label>
+<select id="editMode">
+<option value="cash">💵 Cash</option>
+<option value="upi">📱 UPI</option>
+<option value="bank">🏦 Bank</option>
+<option value="credit">📒 Credit</option>
 </select>
 
-<label>Particular</label>
-<input id="eremark">
+<label>Remark</label>
+<input id="editRemark">
 
-<button
- class="success"
- onclick="update()">
+<button class="success" onclick="updateEntry()">
 💾 Update Entry
 </button>
 
@@ -546,1007 +379,665 @@ Edit/Delete ke liye PIN required hai.
 
 <script>
 
-const K='vyapaar_erp_v2_data';
-const PK='vyapaar_erp_v2_pin';
+const DATA_KEY="VYAPAAR_ERP_V3";
+const PIN_KEY="VYAPAAR_ERP_PIN";
 
-let D=JSON.parse(
- localStorage.getItem(K)||'[]'
-);
+let data=JSON.parse(localStorage.getItem(DATA_KEY)||"[]");
+let PIN=localStorage.getItem(PIN_KEY)||"1234";
 
-let PIN=
- localStorage.getItem(PK)||'1234';
+const $=id=>document.getElementById(id);
 
-const $=x=>
- document.getElementById(x);
-
-const today=()=>
- new Date().toISOString().slice(0,10);
-
-const money=n=>
- '₹'+Number(n||0).toLocaleString(
- 'en-IN',
- {maximumFractionDigits:2}
- );
-
-const name={
- sale:'Sale',
- purchase:'Purchase',
- jama:'Jama (Received)',
- gaya:'Gaya (Paid)'
-};
-
-
-function fmtDate(s){
-
- if(!s)return '';
-
- let p=s.split('-');
-
- return p.length===3
- ? `${p[2]}-${p[1]}-${p[0].slice(-2)}`
- : s;
+function today(){
+ return new Date().toISOString().slice(0,10);
 }
 
+function money(n){
+ return "₹"+Number(n||0).toLocaleString("en-IN",{
+  maximumFractionDigits:2
+ });
+}
 
 function esc(s){
-
- return String(s??'').replace(
- /[&<>"']/g,
- c=>({
- '&':'&amp;',
- '<':'&lt;',
- '>':'&gt;',
- '"':'&quot;',
- "'":'&#039;'
- }[c])
- );
-
+ return String(s??"").replace(/[&<>"']/g,c=>({
+ "&":"&amp;",
+ "<":"&lt;",
+ ">":"&gt;",
+ '"':"&quot;",
+ "'":"&#039;"
+ }[c]));
 }
-
-
-function go(id){
-
- document
- .querySelectorAll('main>section')
- .forEach(x=>x.classList.add('hide'));
-
- $(id).classList.remove('hide');
-
- scrollTo(0,0);
-
- if(id==='entry'){
-  fill();
-  entryTypes();
- }
-
-}
-
 
 function save(){
-
- localStorage.setItem(
-  K,
-  JSON.stringify(D)
- );
-
- home();
+ localStorage.setItem(DATA_KEY,JSON.stringify(data));
+ updateHome();
 }
 
+function show(id){
+ document.querySelectorAll("main>section")
+ .forEach(s=>s.classList.add("hide"));
 
-function sum(a,t){
+ $(id).classList.remove("hide");
 
- return a
- .filter(x=>x.type===t)
- .reduce(
-  (s,x)=>s+Number(x.amount),
-  0
- );
+ window.scrollTo(0,0);
 
-}
-
-
-/*
-Customer:
-Sale = CREDIT
-Jama = DEBIT
-
-Supplier:
-Purchase = CREDIT
-Gaya = DEBIT
-*/
-
-function signed(x){
-
- if(x.partyType==='customer'){
-
-  return x.type==='sale'
-   ? +Number(x.amount)
-   : -Number(x.amount);
-
+ if(id==="entry"){
+  fillPartyList();
+  setEntryTypes();
  }
-
- return x.type==='purchase'
-  ? +Number(x.amount)
-  : -Number(x.amount);
-
 }
 
+function updateHome(){
 
-function balance(a){
+ let a=data.filter(x=>x.date===today());
 
- let pt=
-  a[0]?.partyType||'customer';
-
- let b=
-  a.reduce(
-   (s,x)=>s+signed(x),
-   0
-  );
-
- return [pt,b];
-
+ $("hsale").textContent=money(sumType(a,"sale"));
+ $("hpurchase").textContent=money(sumType(a,"purchase"));
+ $("hjama").textContent=money(sumType(a,"jama"));
+ $("hgaya").textContent=money(sumType(a,"gaya"));
 }
 
-
-function drcr(pt,b){
-
- if(!b)return '';
-
- return b>0
-  ? 'Cr'
-  : 'Dr';
-
+function sumType(arr,type){
+ return arr
+ .filter(x=>x.type===type)
+ .reduce((s,x)=>s+Number(x.amount),0);
 }
 
+function setEntryTypes(){
 
-function dayNet(a){
+ let c=$("ptype").value;
 
- return a
- .filter(x=>x.mode!=='credit')
- .reduce(
-  (s,x)=>
-   s+
-   (
-    x.type==='sale'||x.type==='jama'
-    ? Number(x.amount)
-    : -Number(x.amount)
-   ),
-  0
- );
-
-}
-
-
-function home(){
-
- let a=
-  D.filter(x=>x.date===today());
-
- $('sale').textContent=
-  money(sum(a,'sale'));
-
- $('purchase').textContent=
-  money(sum(a,'purchase'));
-
- $('jama').textContent=
-  money(sum(a,'jama'));
-
- $('gaya').textContent=
-  money(sum(a,'gaya'));
-
- $('todayBal').textContent=
-  money(dayNet(a));
-
-}
-
-
-function fill(){
-
- $('plist').innerHTML=
- [...new Set(D.map(x=>x.party))]
- .sort()
- .map(
-  x=>`<option value="${esc(x)}">`
- )
- .join('');
-
-}
-
-
-function entryTypes(){
-
- let c=$('ptype').value;
-
- if(c==='customer'){
-
-  $('etype').innerHTML=`
-   <option value="sale">
-   Sale (Credit)
-   </option>
-
-   <option value="jama">
-   Jama (Debit / Received)
-   </option>
-  `;
-
+ if(c==="customer"){
+  $("etype").innerHTML=
+  '<option value="sale">Sale — Credit</option>'+
+  '<option value="jama">Paisa Received — Debit</option>';
  }else{
-
-  $('etype').innerHTML=`
-   <option value="purchase">
-   Purchase (Credit)
-   </option>
-
-   <option value="gaya">
-   Gaya (Debit / Paid)
-   </option>
-  `;
-
+  $("etype").innerHTML=
+  '<option value="purchase">Purchase — Debit</option>'+
+  '<option value="gaya">Paisa Paid — Credit</option>';
  }
-
 }
 
+function setEditTypes(){
 
-function editTypes(){
+ let c=$("editPtype").value;
 
- let c=$('eptype').value;
-
- if(c==='customer'){
-
-  $('eetype').innerHTML=`
-   <option value="sale">
-   Sale (Credit)
-   </option>
-
-   <option value="jama">
-   Jama (Debit / Received)
-   </option>
-  `;
-
+ if(c==="customer"){
+  $("editType").innerHTML=
+  '<option value="sale">Sale — Credit</option>'+
+  '<option value="jama">Paisa Received — Debit</option>';
  }else{
+  $("editType").innerHTML=
+  '<option value="purchase">Purchase — Debit</option>'+
+  '<option value="gaya">Paisa Paid — Credit</option>';
+ }
+}
 
-  $('eetype').innerHTML=`
-   <option value="purchase">
-   Purchase (Credit)
-   </option>
+function fillPartyList(){
 
-   <option value="gaya">
-   Gaya (Debit / Paid)
-   </option>
-  `;
+ let names=[...new Set(data.map(x=>x.party))]
+ .filter(Boolean).sort();
 
+ $("partyList").innerHTML=
+ names.map(n=>`<option value="${esc(n)}">`).join("");
+}
+
+function clearEntry(){
+
+ $("party").value="";
+ $("amount").value="";
+ $("remark").value="";
+ $("date").value=today();
+}
+
+function addEntry(){
+
+ let party=$("party").value.trim();
+ let amount=Number($("amount").value);
+
+ if(!party){
+  alert("Party Name डालें");
+  return;
  }
 
-}
+ if(amount<=0){
+  alert("Amount डालें");
+  return;
+ }
 
-
-function clearForm(){
-
- $('party').value='';
- $('amount').value='';
- $('remark').value='';
- $('date').value=today();
-
-}
-
-
-function add(){
-
- let p=
-  $('party').value.trim();
-
- let a=
-  Number($('amount').value);
-
- if(!p||a<=0)
-  return alert(
-   'Party aur Amount डालें'
-  );
-
- D.push({
-
+ data.push({
   id:Date.now()+Math.random(),
-
-  date:
-   $('date').value||today(),
-
-  partyType:
-   $('ptype').value,
-
-  party:p,
-
-  type:
-   $('etype').value,
-
-  amount:a,
-
-  mode:
-   $('mode').value,
-
-  remark:
-   $('remark').value.trim()
-
+  date:$("date").value||today(),
+  partyType:$("ptype").value,
+  party:party,
+  type:$("etype").value,
+  amount:amount,
+  mode:$("mode").value,
+  remark:$("remark").value.trim()
  });
 
  save();
+ clearEntry();
 
- clearForm();
-
- alert('Entry Saved ✅');
-
+ alert("Entry Saved ✅");
+ show("home");
 }
 
+function partyBalance(arr){
 
-function ledger(){
+ if(!arr.length)return 0;
 
- let q=
-  ($('search').value||'')
-  .toLowerCase();
+ let pt=arr[0].partyType;
+ let balance=0;
 
- let ps=
-  [...new Set(D.map(x=>x.party))]
-  .filter(
-   p=>p.toLowerCase().includes(q)
-  )
-  .sort();
+ arr.forEach(x=>{
 
- $('ledgerOut').innerHTML=
+  if(pt==="customer"){
 
- ps.map(p=>{
+   // Customer Sale = Credit
+   // Customer payment received = Debit
+   if(x.type==="sale") balance+=Number(x.amount);
+   if(x.type==="jama") balance-=Number(x.amount);
 
-  let a=
-   D.filter(x=>x.party===p);
+  }else{
 
-  let [pt,b]=
-   balance(a);
+   // Supplier Purchase = Debit
+   // Supplier payment = Credit
+   if(x.type==="purchase") balance+=Number(x.amount);
+   if(x.type==="gaya") balance-=Number(x.amount);
+  }
+ });
 
-  let side=
-   drcr(pt,b);
+ return balance;
+}
+
+function balanceText(arr){
+
+ let b=partyBalance(arr);
+ let pt=arr[0]?.partyType||"customer";
+
+ if(pt==="customer"){
+  return b>=0
+   ? money(b)+" Cr"
+   : money(Math.abs(b))+" Dr";
+ }
+
+ return b>=0
+  ? money(b)+" Dr"
+  : money(Math.abs(b))+" Cr";
+}
+
+function entryName(type){
+
+ return {
+  sale:"Sale",
+  purchase:"Purchase",
+  jama:"Paisa Received",
+  gaya:"Paisa Paid"
+ }[type]||type;
+}
+
+function renderLedger(){
+
+ let q=($("ledgerSearch").value||"").toLowerCase();
+
+ let parties=[...new Set(data.map(x=>x.party))]
+ .filter(p=>p.toLowerCase().includes(q))
+ .sort();
+
+ if(!parties.length){
+  $("ledgerList").innerHTML=
+  '<div class="empty">No Ledger Found</div>';
+  return;
+ }
+
+ $("ledgerList").innerHTML=parties.map(p=>{
+
+  let arr=data.filter(x=>x.party===p);
+  let pt=arr[0].partyType;
 
   return `
-
   <div class="card">
-
    <div class="row">
-
     <div>
-
      <h3>${esc(p)}</h3>
-
      <span class="badge">
-      ${pt}
+      ${pt==="customer"?"Customer":"Supplier"}
      </span>
-
     </div>
 
-    <button
-     class="small primary"
-     onclick="openDetail('${encodeURIComponent(p)}')">
-     Open
+    <button class="small primary"
+    onclick="openParty('${encodeURIComponent(p)}')">
+    Open
     </button>
-
    </div>
 
    <div class="row">
-    Sale
-    <b>${money(sum(a,'sale'))}</b>
+    <span>Sale</span>
+    <b>${money(sumType(arr,"sale"))}</b>
    </div>
 
    <div class="row">
-    Purchase
-    <b>${money(sum(a,'purchase'))}</b>
+    <span>Purchase</span>
+    <b>${money(sumType(arr,"purchase"))}</b>
    </div>
 
    <div class="row">
-    Jama
-    <b>${money(sum(a,'jama'))}</b>
+    <span>Paisa Received</span>
+    <b>${money(sumType(arr,"jama"))}</b>
    </div>
 
    <div class="row">
-    Gaya
-    <b>${money(sum(a,'gaya'))}</b>
+    <span>Paisa Paid</span>
+    <b>${money(sumType(arr,"gaya"))}</b>
    </div>
 
    <div class="row">
-
     <b>Balance</b>
-
-    <b class="${side==='Cr'
-      ?'credit':'debit'}">
-
-     ${money(Math.abs(b))}
-     ${side}
-
-    </b>
-
+    <b class="total">${balanceText(arr)}</b>
    </div>
-
   </div>
-
   `;
 
- }).join('')
-
- ||
-
- '<div class="empty">
- No ledger
- </div>';
-
+ }).join("");
 }
 
+function openParty(encoded){
 
-function openDetail(p){
+ let party=decodeURIComponent(encoded);
 
- p=decodeURIComponent(p);
+ let arr=data
+ .filter(x=>x.party===party)
+ .sort((a,b)=>a.date.localeCompare(b.date));
 
- let a=
-  D.filter(x=>x.party===p)
-  .sort(
-   (x,y)=>
-   x.date.localeCompare(y.date)||
-   x.id-y.id
-  );
+ let balance=0;
+ let pt=arr[0]?.partyType||"customer";
 
- let pt=
-  a[0]?.partyType||'customer';
+ let html="";
 
- let b=0;
+ arr.forEach(x=>{
 
- let html=
- a.map(x=>{
+  if(pt==="customer"){
+   if(x.type==="sale")balance+=Number(x.amount);
+   if(x.type==="jama")balance-=Number(x.amount);
+  }else{
+   if(x.type==="purchase")balance+=Number(x.amount);
+   if(x.type==="gaya")balance-=Number(x.amount);
+  }
 
-  b+=signed(x);
+  let balText;
 
-  let side=
-   drcr(pt,b);
+  if(pt==="customer"){
+   balText=balance>=0
+    ? money(balance)+" Cr"
+    : money(Math.abs(balance))+" Dr";
+  }else{
+   balText=balance>=0
+    ? money(balance)+" Dr"
+    : money(Math.abs(balance))+" Cr";
+  }
 
-  return `
-
+  html+=`
   <div class="row">
-
    <div>
-
-    <b>${fmtDate(x.date)}</b>
-
-    <br>
-
-    ${name[x.type]}
-    • ${x.mode}
-
-    <br>
-
-    <span>
-     Particular:
-     ${esc(x.remark||'')}
-    </span>
-
+    <b>${esc(x.date)}</b><br>
+    ${entryName(x.type)}<br>
+    <span>${esc(x.mode)}</span><br>
+    <span>${esc(x.remark||"")}</span>
    </div>
 
    <div style="text-align:right">
+    <b>${money(x.amount)}</b><br>
+    <span>Bal ${balText}</span><br>
 
-    <b>
-     ${money(x.amount)}
-    </b>
+    <button class="small secondary"
+    onclick="editEntry(${x.id})">✏️</button>
 
-    <br>
-
-    <span>
-     Bal
-     ${money(Math.abs(b))}
-     ${side}
-    </span>
-
-    <br>
-
-    <button
-     class="small secondary"
-     onclick="editEntry(${x.id})">
-     ✏️
-    </button>
-
-    <button
-     class="small danger"
-     onclick="del(${x.id})">
-     🗑️
-    </button>
-
+    <button class="small danger"
+    onclick="deleteEntry(${x.id})">🗑️</button>
    </div>
-
   </div>
-
   `;
+ });
 
- }).join('');
+ html+=`
+ <div class="row">
+  <b>Closing Balance</b>
+  <b class="total">${balanceText(arr)}</b>
+ </div>
+ `;
 
- let side=
-  drcr(pt,b);
+ $("detailTitle").textContent="📒 "+party+" Ledger";
+ $("detailList").innerHTML=html;
 
- $('detailTitle').textContent=
-  '📒 '+p+' Ledger';
-
- $('detailOut').innerHTML=
-  html+
-
-  `
-
-  <div class="row">
-
-   <b>Closing Balance</b>
-
-   <b class="total
-    ${side==='Cr'
-     ?'credit':'debit'}">
-
-    ${money(Math.abs(b))}
-    ${side}
-
-   </b>
-
-  </div>
-
-  `;
-
- go('detail');
-
+ show("detail");
 }
 
+function pinOK(){
 
-function pinok(){
+ let p=prompt("PIN डालें");
 
- return prompt(
-  'PIN डालें'
- )===PIN;
-
+ return p===PIN;
 }
-
 
 function editEntry(id){
 
- if(!pinok())return;
+ if(!pinOK())return;
 
- let x=
-  D.find(z=>z.id==id);
-
- if(!x)return;
-
- $('eid').value=x.id;
-
- $('edate').value=x.date;
-
- $('eptype').value=
-  x.partyType;
-
- editTypes();
-
- $('eparty').value=
-  x.party;
-
- $('eetype').value=
-  x.type;
-
- $('eamount').value=
-  x.amount;
-
- $('emode').value=
-  x.mode;
-
- $('eremark').value=
-  x.remark||'';
-
- go('edit');
-
-}
-
-
-function update(){
-
- if(!pinok())return;
-
- let x=
-  D.find(
-   z=>z.id==$('eid').value
-  );
+ let x=data.find(z=>z.id==id);
 
  if(!x)return;
 
- x.date=
-  $('edate').value;
+ $("editId").value=x.id;
+ $("editDate").value=x.date;
+ $("editPtype").value=x.partyType;
 
- x.partyType=
-  $('eptype').value;
+ setEditTypes();
 
- x.party=
-  $('eparty').value.trim();
+ $("editParty").value=x.party;
+ $("editType").value=x.type;
+ $("editAmount").value=x.amount;
+ $("editMode").value=x.mode;
+ $("editRemark").value=x.remark||"";
 
- x.type=
-  $('eetype').value;
+ show("edit");
+}
 
- x.amount=
-  Number($('eamount').value);
+function updateEntry(){
 
- x.mode=
-  $('emode').value;
+ if(!pinOK())return;
 
- x.remark=
-  $('eremark').value.trim();
+ let x=data.find(z=>z.id==$(
+ "editId").value);
+
+ if(!x)return;
+
+ x.date=$("editDate").value;
+ x.partyType=$("editPtype").value;
+ x.party=$("editParty").value.trim();
+ x.type=$("editType").value;
+ x.amount=Number($("editAmount").value);
+ x.mode=$("editMode").value;
+ x.remark=$("editRemark").value.trim();
 
  save();
 
- alert('Updated ✅');
+ alert("Updated ✅");
 
- go('ledger');
-
- ledger();
-
+ openParty(encodeURIComponent(x.party));
 }
 
+function deleteEntry(id){
 
-function del(id){
+ if(!pinOK())return;
 
- if(
-  !pinok()||
-  !confirm('Delete entry?')
- )return;
+ if(!confirm("Entry Delete करें?"))return;
 
- D=
-  D.filter(x=>x.id!=id);
+ data=data.filter(x=>x.id!=id);
 
  save();
 
- go('ledger');
+ alert("Entry Deleted ✅");
 
- ledger();
-
+ show("ledger");
+ renderLedger();
 }
 
+function cashEffect(x){
 
-function effect(x){
+ // Money entering cash
+ if(x.type==="jama")return Number(x.amount);
 
- return
-  x.type==='sale'||
-  x.type==='jama'
-  ? +x.amount
-  : -x.amount;
+ // Customer sale on cash
+ if(x.type==="sale" && x.mode==="cash")
+  return Number(x.amount);
 
+ // Supplier payment
+ if(x.type==="gaya")return -Number(x.amount);
+
+ // Purchase cash
+ if(x.type==="purchase" && x.mode==="cash")
+  return -Number(x.amount);
+
+ return 0;
 }
 
+function renderCash(){
 
-function rows(a){
+ let d=$("cashDate").value||today();
 
- return a
- .slice()
- .reverse()
- .map(x=>`
+ $("cashDate").value=d;
 
- <div class="row">
+ let arr=data.filter(x=>
+  x.date===d && x.mode==="cash"
+ );
 
-  <div>
+ let incoming=0;
+ let outgoing=0;
 
-   <b>
-    ${fmtDate(x.date)}
-    • ${esc(x.party)}
-   </b>
+ arr.forEach(x=>{
 
-   <br>
+  let e=cashEffect(x);
 
-   ${name[x.type]}
-   • ${x.mode}
+  if(e>0)incoming+=e;
+  if(e<0)outgoing+=Math.abs(e);
 
-   <br>
+ });
 
-   Particular:
-   ${esc(x.remark||'')}
-
-  </div>
-
-  <div>
-
-   <b>
-    ${money(x.amount)}
-   </b>
-
-   <br>
-
-   <button
-    class="small secondary"
-    onclick="editEntry(${x.id})">
-    ✏️
-   </button>
-
-  </div>
-
- </div>
-
- `).join('');
-
-}
-
-
-function cash(){
-
- let d=
-  $('cashDate').value||today();
-
- $('cashDate').value=d;
-
- let a=
-  D.filter(
-   x=>
-   x.date===d&&
-   x.mode==='cash'
-  );
-
- let i=
-  a.filter(x=>effect(x)>0)
-  .reduce(
-   (s,x)=>s+x.amount,
-   0
-  );
-
- let o=
-  a.filter(x=>effect(x)<0)
-  .reduce(
-   (s,x)=>s+x.amount,
-   0
-  );
-
- $('cashOut').innerHTML=
-
- `
+ $("cashList").innerHTML=`
 
  <div class="grid">
-
   <div class="stat">
-
    Cash In
-
-   <b class="in">
-    ${money(i)}
-   </b>
-
+   <b class="in">${money(incoming)}</b>
   </div>
 
   <div class="stat">
-
    Cash Out
-
-   <b class="out">
-    ${money(o)}
-   </b>
-
+   <b class="out">${money(outgoing)}</b>
   </div>
-
  </div>
 
  <div class="row">
-
-  <b>Closing Cash</b>
-
-  <b class="total">
-   ${money(i-o)}
-  </b>
-
+  <b>Net Cash</b>
+  <b class="total">${money(incoming-outgoing)}</b>
  </div>
 
- ${rows(a)}
-
+ ${transactionRows(arr)}
  `;
-
 }
 
+function renderBook(mode){
 
-function book(m){
+ let id=mode==="upi"?"upiList":"bankList";
 
- let id=
-  m==='upi'
-  ?'upiOut'
-  :'bankOut';
+ let arr=data.filter(x=>x.mode===mode);
 
- let a=
-  D.filter(x=>x.mode===m);
+ let incoming=0;
+ let outgoing=0;
 
- let i=
-  a.filter(x=>effect(x)>0)
-  .reduce(
-   (s,x)=>s+x.amount,
-   0
-  );
+ arr.forEach(x=>{
 
- let o=
-  a.filter(x=>effect(x)<0)
-  .reduce(
-   (s,x)=>s+x.amount,
-   0
-  );
+  let e=cashEffect(x);
 
- $(id).innerHTML=
+  if(e>0)incoming+=e;
+  if(e<0)outgoing+=Math.abs(e);
 
- `
+ });
+
+ $(id).innerHTML=`
 
  <div class="grid">
-
   <div class="stat">
    In
-   <b class="in">
-    ${money(i)}
-   </b>
+   <b class="in">${money(incoming)}</b>
   </div>
 
   <div class="stat">
    Out
-   <b class="out">
-    ${money(o)}
-   </b>
+   <b class="out">${money(outgoing)}</b>
   </div>
-
  </div>
 
  <div class="row">
-
   <b>Net</b>
-
-  <b>
-   ${money(i-o)}
-  </b>
-
+  <b class="total">${money(incoming-outgoing)}</b>
  </div>
 
- ${rows(a)}
-
+ ${transactionRows(arr)}
  `;
-
 }
 
+function transactionRows(arr){
 
-function report(){
+ if(!arr.length)
+  return '<div class="empty">No Entry</div>';
 
- let d=
-  $('rdate').value||today();
+ return arr.slice().reverse().map(x=>`
 
- $('rdate').value=d;
+ <div class="row">
+  <div>
+   <b>${esc(x.date)}</b><br>
+   ${esc(x.party)}<br>
+   ${entryName(x.type)}
+  </div>
 
- let a=
-  D.filter(x=>x.date===d);
+  <div style="text-align:right">
+   <b>${money(x.amount)}</b><br>
 
- let net=
-  dayNet(a);
+   <button class="small secondary"
+   onclick="editEntry(${x.id})">✏️</button>
+  </div>
+ </div>
 
- $('reportOut').innerHTML=
+ `).join("");
+}
 
- `
+function renderReport(){
+
+ let d=$("reportDate").value||today();
+
+ $("reportDate").value=d;
+
+ let arr=data.filter(x=>x.date===d);
+
+ $("reportList").innerHTML=`
 
  <div class="grid">
 
   <div class="stat">
    Sale
-   <b>
-    ${money(sum(a,'sale'))}
-   </b>
+   <b>${money(sumType(arr,"sale"))}</b>
   </div>
 
   <div class="stat">
    Purchase
-   <b>
-    ${money(sum(a,'purchase'))}
-   </b>
+   <b>${money(sumType(arr,"purchase"))}</b>
   </div>
 
   <div class="stat">
-   Jama / Debit
-   <b>
-    ${money(sum(a,'jama'))}
-   </b>
+   Jama
+   <b>${money(sumType(arr,"jama"))}</b>
   </div>
 
   <div class="stat">
-   Gaya / Debit
-   <b>
-    ${money(sum(a,'gaya'))}
-   </b>
+   Gaya
+   <b>${money(sumType(arr,"gaya"))}</b>
   </div>
 
  </div>
 
- <div class="row">
-
-  <b>Today Balance</b>
-
-  <b class="total">
-   ${money(net)}
-  </b>
-
- </div>
-
- ${rows(a)}
-
+ ${transactionRows(arr)}
  `;
-
 }
 
+function renderParties(){
 
-function parties(){
+ let names=[...new Set(data.map(x=>x.party))]
+ .sort();
 
- $('partyOut').innerHTML=
+ if(!names.length){
+  $("partiesList").innerHTML=
+  '<div class="empty">No Parties</div>';
+  return;
+ }
 
- [...new Set(D.map(x=>x.party))]
- .sort()
- .map(p=>`
+ $("partiesList").innerHTML=names.map(p=>`
 
  <div class="row">
+  <b>${esc(p)}</b>
 
-  <b>
-   ${esc(p)}
-  </b>
-
-  <button
-   class="small primary"
-   onclick="openDetail('${encodeURIComponent(p)}')">
-   Open
+  <button class="small primary"
+  onclick="openParty('${encodeURIComponent(p)}')">
+  Open
   </button>
-
  </div>
 
- `).join('')
-
- ||
-
- '<div class="empty">
- No parties
- </div>';
-
+ `).join("");
 }
-
 
 function changePin(){
 
- let p=
-  $('newpin').value;
+ let p=$("newPin").value;
 
- if(!/^\d{4,6}$/.test(p))
-  return alert(
-   '4-6 digit PIN डालें'
-  );
+ if(!/^\d{4,6}$/.test(p)){
+  alert("4 से 6 digit PIN डालें");
+  return;
+ }
 
  PIN=p;
 
- localStorage.setItem(
-  PK,p
- );
+ localStorage.setItem(PIN_KEY,PIN);
 
- alert(
-  'PIN Changed ✅'
- );
+ $("newPin").value="";
 
+ alert("PIN Changed ✅");
 }
 
+function backupData(){
 
-function backup(){
+ let blob=new Blob(
+  [JSON.stringify(data,null,2)],
+  {type:"application/json"}
+ );
 
- let a=
-  document.createElement('a');
+ let url=URL.createObjectURL(blob);
 
- a.href=
-  URL.createObjectURL(
-   new Blob(
-    [JSON.stringify(D,null,2)],
-    {type:'application/json'}
-   )
-  );
+ let a=document.createElement("a");
 
- a.download=
-  'vyapaar-erp-backup.json';
+ a.href=url;
+ a.download="vyapaar-erp-backup.json";
 
+ document.body.appendChild(a);
  a.click();
+ a.remove();
 
+ URL.revokeObjectURL(url);
+}
+
+function clearAllData(){
+
+ if(!pinOK())return;
+
+ if(!confirm(
+ "WARNING: सभी Entries Delete हो जाएंगी. Continue?"
+ ))return;
+
+ data=[];
+
+ save();
+
+ alert("All Data Deleted");
 }
 
 
-$('date').value=today();
-$('cashDate').value=today();
-$('rdate').value=today();
+/* START */
 
-entryTypes();
-home();
+$("date").value=today();
+$("cashDate").value=today();
+$("reportDate").value=today();
+
+setEntryTypes();
+updateHome();
 
 </script>
 
