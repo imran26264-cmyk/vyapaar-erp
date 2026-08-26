@@ -4,1043 +4,143 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#1769aa">
-<title>VYAPAAR ERP V3</title>
-
+<title>VYAPAAR ERP V3 FINAL</title>
 <style>
-*{box-sizing:border-box}
-body{
- margin:0;background:#eef3f9;color:#17202a;
- font-family:Arial,sans-serif
-}
-header{
- background:#1769aa;color:white;padding:18px;
- text-align:center;position:sticky;top:0;z-index:10
-}
-header h1{margin:0;font-size:25px}
-main{max-width:900px;margin:auto;padding:14px}
-.card{
- background:white;border-radius:20px;padding:17px;
- margin-bottom:14px;box-shadow:0 3px 15px #0002
-}
-h2{margin:0 0 15px}
-.menu,.grid{
- display:grid;grid-template-columns:1fr 1fr;gap:11px
-}
-button{
- width:100%;border:0;border-radius:14px;
- padding:14px;font-size:16px;font-weight:bold
-}
-.primary{background:#1769aa;color:white}
-.secondary{background:#e5edf5;color:#17202a}
-.success{background:#168a4b;color:white}
-.danger{background:#d9534f;color:white}
-.hide{display:none!important}
-label{font-weight:bold;display:block;margin-top:8px}
-input,select{
- width:100%;padding:13px;margin:6px 0 12px;
- border:1px solid #c8d2dd;border-radius:12px;
- font-size:16px;background:white
-}
-.row{
- display:flex;justify-content:space-between;
- gap:10px;padding:12px 0;
- border-bottom:1px solid #e2e6ea
-}
-.stat{
- background:#f3f7fa;border-radius:15px;padding:14px
-}
-.stat b{display:block;font-size:20px;margin-top:5px}
-.badge{
- display:inline-block;padding:5px 9px;
- border-radius:20px;background:#e5edf5;font-size:12px
-}
-.in{color:#168a4b}.out{color:#d9534f}
-.small{width:auto;padding:7px 10px;font-size:13px}
-.empty{text-align:center;color:#777;padding:25px}
-.total{font-size:21px}
-.nav{margin-bottom:12px}
-.notice{
- padding:12px;border-radius:12px;
- background:#fff5d6;margin-bottom:12px
-}
-@media(max-width:550px){
- .menu,.grid{grid-template-columns:1fr}
-}
+*{box-sizing:border-box}body{margin:0;background:#eef3f9;color:#17202a;font-family:Arial,sans-serif}
+header{background:#1769aa;color:#fff;padding:18px;text-align:center;position:sticky;top:0;z-index:10}
+header h1{margin:0;font-size:25px}main{max-width:950px;margin:auto;padding:14px}
+.card{background:#fff;border-radius:20px;padding:17px;margin-bottom:14px;box-shadow:0 3px 15px #0002}
+h2{margin:0 0 15px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+button{width:100%;border:0;border-radius:14px;padding:14px;font-size:16px;font-weight:bold;cursor:pointer}
+.primary{background:#1769aa;color:#fff}.secondary{background:#e5edf5;color:#17202a}.success{background:#168a4b;color:#fff}.danger{background:#d9534f;color:#fff}
+.hide{display:none!important}label{font-weight:bold;display:block;margin-top:8px}
+input,select,textarea{width:100%;padding:13px;margin:6px 0 12px;border:1px solid #c8d2dd;border-radius:12px;font-size:16px;background:#fff}
+textarea{min-height:75px}.row{display:flex;justify-content:space-between;gap:10px;padding:12px 0;border-bottom:1px solid #e2e6ea}
+.stat{background:#f3f7fa;border-radius:15px;padding:14px}.stat b{display:block;font-size:20px;margin-top:5px}
+.in{color:#168a4b}.out{color:#d9534f}.small{width:auto;padding:7px 10px;font-size:13px}
+.empty{text-align:center;color:#777;padding:25px}.total{font-size:21px}.notice{padding:12px;border-radius:12px;background:#fff5d6;margin-bottom:12px}
+.tablewrap{overflow:auto}table{width:100%;border-collapse:collapse;min-width:680px}th,td{padding:9px;border-bottom:1px solid #ddd;text-align:left}th{background:#e8f0f7}
+.balance{font-size:20px;font-weight:bold;padding:12px;background:#f3f7fa;border-radius:12px;margin-top:10px}
+@media(max-width:600px){.grid{grid-template-columns:1fr}header h1{font-size:23px}}
+@media print{header,button,.nav,.no-print{display:none!important}body{background:#fff}.card{box-shadow:none;border:0}}
 </style>
 </head>
-
 <body>
-
-<header>
-<h1>VYAPAAR ERP V3</h1>
-</header>
-
+<header><h1>VYAPAAR ERP V3</h1></header>
 <main>
 
-<!-- HOME -->
 <section id="home">
-
 <div class="card">
 <h2>🏠 Home</h2>
-
-<div class="menu">
-<button class="primary" onclick="show('entry')">➕ Daily Entry</button>
-<button class="secondary" onclick="show('ledger');renderLedger()">📒 Ledger</button>
-<button class="secondary" onclick="show('cash');renderCash()">💵 Cashbook</button>
-<button class="secondary" onclick="show('upi');renderBook('upi')">📱 UPI Book</button>
-<button class="secondary" onclick="show('bank');renderBook('bank')">🏦 Bank Book</button>
-<button class="secondary" onclick="show('report');renderReport()">📊 Daily Report</button>
+<div class="grid">
+<button class="primary" onclick="show('entry')">➕ Daily IN / OUT</button>
+<button class="secondary" onclick="show('invoice');newInvoice()">🧾 Invoice</button>
+<button class="secondary" onclick="show('customerLedger');renderPartyLedger('customer')">👤 Customer Ledger</button>
+<button class="secondary" onclick="show('supplierLedger');renderPartyLedger('supplier')">🏭 Supplier Ledger</button>
+<button class="secondary" onclick="show('statement')">📄 Statement</button>
+<button class="secondary" onclick="show('price')">💰 Price List</button>
+<button class="secondary" onclick="show('items');renderItems()">📦 Items</button>
 <button class="secondary" onclick="show('parties');renderParties()">👥 Parties</button>
-<button class="secondary" onclick="show('settings')">⚙️ Settings</button>
+<button class="secondary" onclick="show('firm')">🏢 Firm / GST</button>
+<button class="secondary" onclick="show('gst');renderGST()">🧾 GST Summary</button>
+<button class="secondary" onclick="show('balance');renderDailyBalance()">📊 Daily Balance</button>
+<button class="secondary" onclick="show('cash');renderCash()">💵 Cashbook</button>
 </div>
 </div>
-
 <div class="card">
 <h2>📌 Today's Summary</h2>
-
 <div class="grid">
-<div class="stat">Sale<b id="hsale">₹0</b></div>
-<div class="stat">Purchase<b id="hpurchase">₹0</b></div>
-<div class="stat">Jama / Received<b id="hjama">₹0</b></div>
-<div class="stat">Gaya / Paid<b id="hgaya">₹0</b></div>
-</div>
-</div>
-
+<div class="stat">Sale<b id="hsale">₹0</b></div><div class="stat">Purchase<b id="hpurchase">₹0</b></div>
+<div class="stat">Received<b id="hreceived">₹0</b></div><div class="stat">Paid<b id="hpaid">₹0</b></div>
+<div class="stat">GST Bills<b id="hgst">₹0</b></div><div class="stat">Net Cash/Bank/UPI<b id="hnet">₹0</b></div>
+</div></div>
 </section>
 
-
-<!-- ENTRY -->
 <section id="entry" class="hide">
-
-<div class="nav">
-<button class="secondary" onclick="show('home')">← Home</button>
-</div>
-
-<div class="card">
-
-<h2>➕ Daily Entry</h2>
-
-<div class="notice">
-<b>Customer:</b> Sale = Credit | Paisa Received = Debit
-<br>
-<b>Supplier:</b> Purchase = Debit | Paisa Paid = Credit
-</div>
-
-<label>Date</label>
-<input id="date" type="date">
-
-<label>Party Type</label>
-<select id="ptype" onchange="setEntryTypes()">
-<option value="customer">Customer</option>
-<option value="supplier">Supplier</option>
-</select>
-
-<label>Party Name</label>
-<input id="party" list="partyList"
-placeholder="Customer / Supplier name">
+<div class="nav"><button class="secondary" onclick="show('home')">← Home</button></div>
+<div class="card"><h2>➕ Daily IN / OUT Entry</h2>
+<div class="notice"><b>Customer:</b> Sale se customer balance badhega, Received se customer balance ghatega.<br><b>Supplier:</b> Purchase se supplier payable badhega, Paid se supplier payable ghatega. Payment ke liye alag double entry nahi.</div>
+<label>Date</label><input id="date" type="date">
+<label>Party Type</label><select id="ptype" onchange="setEntryTypes()"><option value="customer">Customer</option><option value="supplier">Supplier</option></select>
+<label>Party Name</label><div class="grid"><input id="party" list="partyList" placeholder="Party name"><button class="secondary" onclick="savePartyFromEntry()">＋ Save Party</button></div>
 <datalist id="partyList"></datalist>
+<label>Entry Type</label><select id="etype"></select>
+<label>Amount ₹</label><input id="amount" type="number" min="0" step="0.01">
+<label>Payment Mode</label><select id="mode"><option value="cash">💵 Cash</option><option value="upi">📱 UPI</option><option value="bank">🏦 Bank</option><option value="credit">📒 Credit / Udhaar</option></select>
+<label>GST Bill?</label><select id="gstFlag"><option value="no">No</option><option value="yes">Yes</option></select>
+<label>GST %</label><input id="gstRate" type="number" min="0" step="0.01" value="18">
+<label>Remark</label><input id="remark" placeholder="Optional">
+<div class="grid"><button class="primary" onclick="addEntry()">💾 Save Entry</button><button class="secondary" onclick="clearEntry()">↻ Clear</button></div>
+</div></section>
 
-<label>Entry Type</label>
-<select id="etype"></select>
+<section id="customerLedger" class="hide"><div class="nav"><button class="secondary" onclick="show('home')">← Home</button></div><div class="card"><h2>👤 Customer Ledger</h2><input id="customerSearch" placeholder="🔎 Search customer" oninput="renderPartyLedger('customer')"><div id="customerLedgerList"></div></div></section>
+<section id="supplierLedger" class="hide"><div class="nav"><button class="secondary" onclick="show('home')">← Home</button></div><div class="card"><h2>🏭 Supplier Ledger</h2><input id="supplierSearch" placeholder="🔎 Search supplier" oninput="renderPartyLedger('supplier')"><div id="supplierLedgerList"></div></div></section>
 
-<label>Amount ₹</label>
-<input id="amount" type="number" min="0" inputmode="decimal">
+<section id="detail" class="hide"><div class="nav"><button class="secondary" onclick="show(lastLedgerPage)">← Back</button></div><div class="card"><h2 id="detailTitle"></h2><div id="detailList"></div></div></section>
 
-<label>Payment Mode</label>
-<select id="mode">
-<option value="cash">💵 Cash</option>
-<option value="upi">📱 UPI</option>
-<option value="bank">🏦 Bank</option>
-<option value="credit">📒 Credit / Udhaar</option>
-</select>
+<section id="statement" class="hide"><div class="nav"><button class="secondary" onclick="show('home')">← Home</button></div><div class="card"><h2>📄 Party Statement / PDF</h2><label>Party</label><select id="statementParty" onchange="renderStatement()"></select><button class="primary no-print" onclick="printStatement()">🖨️ Generate / Save PDF</button><div id="statementList"></div></div></section>
 
-<label>Remark</label>
-<input id="remark" placeholder="Optional">
+<section id="cash" class="hide"><div class="nav"><button class="secondary" onclick="show('home')">← Home</button></div><div class="card"><h2>💵 Cashbook</h2><label>Search Party</label><input id="cashSearch" placeholder="🔎 Party search" oninput="renderCash()"><div id="cashList"></div></div></section>
 
-<div class="grid">
-<button class="primary" onclick="addEntry()">💾 Save Entry</button>
-<button class="secondary" onclick="clearEntry()">↻ Clear</button>
-</div>
+<section id="price" class="hide"><div class="nav"><button class="secondary" onclick="show('home')">← Home</button></div><div class="card"><h2>💰 Price List</h2><div class="grid"><input id="priceItem" placeholder="Item"><input id="priceValue" type="number" placeholder="Price"></div><button class="success" onclick="addPrice()">＋ Add / Update Price</button><div id="priceList"></div></div></section>
 
-</div>
-</section>
+<section id="items" class="hide"><div class="nav"><button class="secondary" onclick="show('home')">← Home</button></div><div class="card"><h2>📦 Items</h2><div class="grid"><input id="itemName" placeholder="Item name"><input id="itemUnit" placeholder="Unit"></div><button class="success" onclick="addItem()">＋ Save Item</button><div id="itemsList"></div></div></section>
 
+<section id="parties" class="hide"><div class="nav"><button class="secondary" onclick="show('home')">← Home</button></div><div class="card"><h2>👥 Parties</h2><div class="grid"><input id="newPartyName" placeholder="Party name"><select id="newPartyType"><option value="customer">Customer</option><option value="supplier">Supplier</option></select></div><input id="newPartyMobile" placeholder="Mobile"><input id="newPartyAddress" placeholder="Address"><input id="newPartyGST" placeholder="GSTIN"><button class="success" onclick="saveParty()">💾 Save Party</button><div id="partiesList"></div></div></section>
 
-<!-- LEDGER -->
-<section id="ledger" class="hide">
+<section id="invoice" class="hide"><div class="nav"><button class="secondary" onclick="show('home')">← Home</button></div><div class="card"><h2>🧾 Tax Invoice</h2>
+<label>Invoice No.</label><input id="invNo"><label>Date</label><input id="invDate" type="date"><label>Party Name</label><input id="invParty" list="partyList"><label>Mobile</label><input id="invMobile"><label>Address</label><textarea id="invAddress"></textarea><label>GSTIN</label><input id="invGST">
+<div class="tablewrap"><table id="invTable"><thead><tr><th>Item</th><th>Qty</th><th>Rate</th><th>GST %</th><th>Total</th><th></th></tr></thead><tbody></tbody></table></div>
+<button class="secondary no-print" onclick="addInvoiceRow()">＋ Add Item</button><div class="balance">Grand Total: <span id="invTotal">₹0</span></div><button class="primary no-print" onclick="printInvoice()">🖨️ Print / PDF Invoice</button></div></section>
 
-<div class="nav">
-<button class="secondary" onclick="show('home')">← Home</button>
-</div>
+<section id="gst" class="hide"><div class="nav"><button class="secondary" onclick="show('home')">← Home</button></div><div class="card"><h2>🧾 GST Summary</h2><div id="gstList"></div></div></section>
 
-<div class="card">
-<h2>📒 Party Ledger</h2>
+<section id="balance" class="hide"><div class="nav"><button class="secondary" onclick="show('home')">← Home</button></div><div class="card"><h2>📊 Daily Balance</h2><label>Date</label><input id="balDate" type="date" onchange="renderDailyBalance()"><div id="balanceList"></div></div></section>
 
-<input id="ledgerSearch"
-placeholder="🔎 Search Party"
-oninput="renderLedger()">
-
-<div id="ledgerList"></div>
-</div>
-
-</section>
-
-
-<!-- DETAIL -->
-<section id="detail" class="hide">
-
-<div class="nav">
-<button class="secondary" onclick="show('ledger');renderLedger()">← Ledger</button>
-</div>
-
-<div class="card">
-<h2 id="detailTitle">Party Ledger</h2>
-<div id="detailList"></div>
-</div>
-
-</section>
-
-
-<!-- CASH -->
-<section id="cash" class="hide">
-
-<div class="nav">
-<button class="secondary" onclick="show('home')">← Home</button>
-</div>
-
-<div class="card">
-<h2>💵 Cashbook</h2>
-
-<label>Date</label>
-<input id="cashDate" type="date" onchange="renderCash()">
-
-<div id="cashList"></div>
-</div>
-
-</section>
-
-
-<!-- UPI -->
-<section id="upi" class="hide">
-
-<div class="nav">
-<button class="secondary" onclick="show('home')">← Home</button>
-</div>
-
-<div class="card">
-<h2>📱 UPI Book</h2>
-<div id="upiList"></div>
-</div>
-
-</section>
-
-
-<!-- BANK -->
-<section id="bank" class="hide">
-
-<div class="nav">
-<button class="secondary" onclick="show('home')">← Home</button>
-</div>
-
-<div class="card">
-<h2>🏦 Bank Book</h2>
-<div id="bankList"></div>
-</div>
-
-</section>
-
-
-<!-- REPORT -->
-<section id="report" class="hide">
-
-<div class="nav">
-<button class="secondary" onclick="show('home')">← Home</button>
-</div>
-
-<div class="card">
-<h2>📊 Daily Report</h2>
-
-<label>Date</label>
-<input id="reportDate" type="date" onchange="renderReport()">
-
-<div id="reportList"></div>
-</div>
-
-</section>
-
-
-<!-- PARTIES -->
-<section id="parties" class="hide">
-
-<div class="nav">
-<button class="secondary" onclick="show('home')">← Home</button>
-</div>
-
-<div class="card">
-<h2>👥 Parties</h2>
-<div id="partiesList"></div>
-</div>
-
-</section>
-
-
-<!-- SETTINGS -->
-<section id="settings" class="hide">
-
-<div class="nav">
-<button class="secondary" onclick="show('home')">← Home</button>
-</div>
-
-<div class="card">
-<h2>⚙️ Settings</h2>
-
-<p>Edit और Delete के लिए PIN required है.</p>
-
-<label>New PIN</label>
-<input id="newPin" type="password" maxlength="6"
-inputmode="numeric">
-
-<button class="primary" onclick="changePin()">
-🔐 Change PIN
-</button>
-</div>
-
-<div class="card">
-<h2>📦 Backup</h2>
-
-<button class="secondary" onclick="backupData()">
-⬇️ Download Backup
-</button>
-</div>
-
-<div class="card">
-<h2>🗑️ Data</h2>
-
-<button class="danger" onclick="clearAllData()">
-Delete All Data
-</button>
-</div>
-
-</section>
-
-
-<!-- EDIT -->
-<section id="edit" class="hide">
-
-<div class="nav">
-<button class="secondary"
-onclick="show('detail')">
-← Back
-</button>
-</div>
-
-<div class="card">
-
-<h2>✏️ Edit Entry</h2>
-
-<input id="editId" type="hidden">
-
-<label>Date</label>
-<input id="editDate" type="date">
-
-<label>Party Type</label>
-<select id="editPtype" onchange="setEditTypes()">
-<option value="customer">Customer</option>
-<option value="supplier">Supplier</option>
-</select>
-
-<label>Party</label>
-<input id="editParty">
-
-<label>Entry Type</label>
-<select id="editType"></select>
-
-<label>Amount ₹</label>
-<input id="editAmount" type="number">
-
-<label>Payment Mode</label>
-<select id="editMode">
-<option value="cash">💵 Cash</option>
-<option value="upi">📱 UPI</option>
-<option value="bank">🏦 Bank</option>
-<option value="credit">📒 Credit</option>
-</select>
-
-<label>Remark</label>
-<input id="editRemark">
-
-<button class="success" onclick="updateEntry()">
-💾 Update Entry
-</button>
-
-</div>
-</section>
-
-
-<script>
-
-const DATA_KEY="VYAPAAR_ERP_V3";
-const PIN_KEY="VYAPAAR_ERP_PIN";
-
-let data=JSON.parse(localStorage.getItem(DATA_KEY)||"[]");
-let PIN=localStorage.getItem(PIN_KEY)||"1234";
-
-const $=id=>document.getElementById(id);
-
-function today(){
- return new Date().toISOString().slice(0,10);
-}
-
-function money(n){
- return "₹"+Number(n||0).toLocaleString("en-IN",{
-  maximumFractionDigits:2
- });
-}
-
-function esc(s){
- return String(s??"").replace(/[&<>"']/g,c=>({
- "&":"&amp;",
- "<":"&lt;",
- ">":"&gt;",
- '"':"&quot;",
- "'":"&#039;"
- }[c]));
-}
-
-function save(){
- localStorage.setItem(DATA_KEY,JSON.stringify(data));
- updateHome();
-}
-
-function show(id){
- document.querySelectorAll("main>section")
- .forEach(s=>s.classList.add("hide"));
-
- $(id).classList.remove("hide");
-
- window.scrollTo(0,0);
-
- if(id==="entry"){
-  fillPartyList();
-  setEntryTypes();
- }
-}
-
-function updateHome(){
-
- let a=data.filter(x=>x.date===today());
-
- $("hsale").textContent=money(sumType(a,"sale"));
- $("hpurchase").textContent=money(sumType(a,"purchase"));
- $("hjama").textContent=money(sumType(a,"jama"));
- $("hgaya").textContent=money(sumType(a,"gaya"));
-}
-
-function sumType(arr,type){
- return arr
- .filter(x=>x.type===type)
- .reduce((s,x)=>s+Number(x.amount),0);
-}
-
-function setEntryTypes(){
-
- let c=$("ptype").value;
-
- if(c==="customer"){
-  $("etype").innerHTML=
-  '<option value="sale">Sale — Credit</option>'+
-  '<option value="jama">Paisa Received — Debit</option>';
- }else{
-  $("etype").innerHTML=
-  '<option value="purchase">Purchase — Debit</option>'+
-  '<option value="gaya">Paisa Paid — Credit</option>';
- }
-}
-
-function setEditTypes(){
-
- let c=$("editPtype").value;
-
- if(c==="customer"){
-  $("editType").innerHTML=
-  '<option value="sale">Sale — Credit</option>'+
-  '<option value="jama">Paisa Received — Debit</option>';
- }else{
-  $("editType").innerHTML=
-  '<option value="purchase">Purchase — Debit</option>'+
-  '<option value="gaya">Paisa Paid — Credit</option>';
- }
-}
-
-function fillPartyList(){
-
- let names=[...new Set(data.map(x=>x.party))]
- .filter(Boolean).sort();
-
- $("partyList").innerHTML=
- names.map(n=>`<option value="${esc(n)}">`).join("");
-}
-
-function clearEntry(){
-
- $("party").value="";
- $("amount").value="";
- $("remark").value="";
- $("date").value=today();
-}
-
-function addEntry(){
-
- let party=$("party").value.trim();
- let amount=Number($("amount").value);
-
- if(!party){
-  alert("Party Name डालें");
-  return;
- }
-
- if(amount<=0){
-  alert("Amount डालें");
-  return;
- }
-
- data.push({
-  id:Date.now()+Math.random(),
-  date:$("date").value||today(),
-  partyType:$("ptype").value,
-  party:party,
-  type:$("etype").value,
-  amount:amount,
-  mode:$("mode").value,
-  remark:$("remark").value.trim()
- });
-
- save();
- clearEntry();
-
- alert("Entry Saved ✅");
- show("home");
-}
-
-function partyBalance(arr){
-
- if(!arr.length)return 0;
-
- let pt=arr[0].partyType;
- let balance=0;
-
- arr.forEach(x=>{
-
-  if(pt==="customer"){
-
-   // Customer Sale = Credit
-   // Customer payment received = Debit
-   if(x.type==="sale") balance+=Number(x.amount);
-   if(x.type==="jama") balance-=Number(x.amount);
-
-  }else{
-
-   // Supplier Purchase = Debit
-   // Supplier payment = Credit
-   if(x.type==="purchase") balance+=Number(x.amount);
-   if(x.type==="gaya") balance-=Number(x.amount);
-  }
- });
-
- return balance;
-}
-
-function balanceText(arr){
-
- let b=partyBalance(arr);
- let pt=arr[0]?.partyType||"customer";
-
- if(pt==="customer"){
-  return b>=0
-   ? money(b)+" Cr"
-   : money(Math.abs(b))+" Dr";
- }
-
- return b>=0
-  ? money(b)+" Dr"
-  : money(Math.abs(b))+" Cr";
-}
-
-function entryName(type){
-
- return {
-  sale:"Sale",
-  purchase:"Purchase",
-  jama:"Paisa Received",
-  gaya:"Paisa Paid"
- }[type]||type;
-}
-
-function renderLedger(){
-
- let q=($("ledgerSearch").value||"").toLowerCase();
-
- let parties=[...new Set(data.map(x=>x.party))]
- .filter(p=>p.toLowerCase().includes(q))
- .sort();
-
- if(!parties.length){
-  $("ledgerList").innerHTML=
-  '<div class="empty">No Ledger Found</div>';
-  return;
- }
-
- $("ledgerList").innerHTML=parties.map(p=>{
-
-  let arr=data.filter(x=>x.party===p);
-  let pt=arr[0].partyType;
-
-  return `
-  <div class="card">
-   <div class="row">
-    <div>
-     <h3>${esc(p)}</h3>
-     <span class="badge">
-      ${pt==="customer"?"Customer":"Supplier"}
-     </span>
-    </div>
-
-    <button class="small primary"
-    onclick="openParty('${encodeURIComponent(p)}')">
-    Open
-    </button>
-   </div>
-
-   <div class="row">
-    <span>Sale</span>
-    <b>${money(sumType(arr,"sale"))}</b>
-   </div>
-
-   <div class="row">
-    <span>Purchase</span>
-    <b>${money(sumType(arr,"purchase"))}</b>
-   </div>
-
-   <div class="row">
-    <span>Paisa Received</span>
-    <b>${money(sumType(arr,"jama"))}</b>
-   </div>
-
-   <div class="row">
-    <span>Paisa Paid</span>
-    <b>${money(sumType(arr,"gaya"))}</b>
-   </div>
-
-   <div class="row">
-    <b>Balance</b>
-    <b class="total">${balanceText(arr)}</b>
-   </div>
-  </div>
-  `;
-
- }).join("");
-}
-
-function openParty(encoded){
-
- let party=decodeURIComponent(encoded);
-
- let arr=data
- .filter(x=>x.party===party)
- .sort((a,b)=>a.date.localeCompare(b.date));
-
- let balance=0;
- let pt=arr[0]?.partyType||"customer";
-
- let html="";
-
- arr.forEach(x=>{
-
-  if(pt==="customer"){
-   if(x.type==="sale")balance+=Number(x.amount);
-   if(x.type==="jama")balance-=Number(x.amount);
-  }else{
-   if(x.type==="purchase")balance+=Number(x.amount);
-   if(x.type==="gaya")balance-=Number(x.amount);
-  }
-
-  let balText;
-
-  if(pt==="customer"){
-   balText=balance>=0
-    ? money(balance)+" Cr"
-    : money(Math.abs(balance))+" Dr";
-  }else{
-   balText=balance>=0
-    ? money(balance)+" Dr"
-    : money(Math.abs(balance))+" Cr";
-  }
-
-  html+=`
-  <div class="row">
-   <div>
-    <b>${esc(x.date)}</b><br>
-    ${entryName(x.type)}<br>
-    <span>${esc(x.mode)}</span><br>
-    <span>${esc(x.remark||"")}</span>
-   </div>
-
-   <div style="text-align:right">
-    <b>${money(x.amount)}</b><br>
-    <span>Bal ${balText}</span><br>
-
-    <button class="small secondary"
-    onclick="editEntry(${x.id})">✏️</button>
-
-    <button class="small danger"
-    onclick="deleteEntry(${x.id})">🗑️</button>
-   </div>
-  </div>
-  `;
- });
-
- html+=`
- <div class="row">
-  <b>Closing Balance</b>
-  <b class="total">${balanceText(arr)}</b>
- </div>
- `;
-
- $("detailTitle").textContent="📒 "+party+" Ledger";
- $("detailList").innerHTML=html;
-
- show("detail");
-}
-
-function pinOK(){
-
- let p=prompt("PIN डालें");
-
- return p===PIN;
-}
-
-function editEntry(id){
-
- if(!pinOK())return;
-
- let x=data.find(z=>z.id==id);
-
- if(!x)return;
-
- $("editId").value=x.id;
- $("editDate").value=x.date;
- $("editPtype").value=x.partyType;
-
- setEditTypes();
-
- $("editParty").value=x.party;
- $("editType").value=x.type;
- $("editAmount").value=x.amount;
- $("editMode").value=x.mode;
- $("editRemark").value=x.remark||"";
-
- show("edit");
-}
-
-function updateEntry(){
-
- if(!pinOK())return;
-
- let x=data.find(z=>z.id==$(
- "editId").value);
-
- if(!x)return;
-
- x.date=$("editDate").value;
- x.partyType=$("editPtype").value;
- x.party=$("editParty").value.trim();
- x.type=$("editType").value;
- x.amount=Number($("editAmount").value);
- x.mode=$("editMode").value;
- x.remark=$("editRemark").value.trim();
-
- save();
-
- alert("Updated ✅");
-
- openParty(encodeURIComponent(x.party));
-}
-
-function deleteEntry(id){
-
- if(!pinOK())return;
-
- if(!confirm("Entry Delete करें?"))return;
-
- data=data.filter(x=>x.id!=id);
-
- save();
-
- alert("Entry Deleted ✅");
-
- show("ledger");
- renderLedger();
-}
-
-function cashEffect(x){
-
- // Money entering cash
- if(x.type==="jama")return Number(x.amount);
-
- // Customer sale on cash
- if(x.type==="sale" && x.mode==="cash")
-  return Number(x.amount);
-
- // Supplier payment
- if(x.type==="gaya")return -Number(x.amount);
-
- // Purchase cash
- if(x.type==="purchase" && x.mode==="cash")
-  return -Number(x.amount);
-
- return 0;
-}
-
-function renderCash(){
-
- let d=$("cashDate").value||today();
-
- $("cashDate").value=d;
-
- let arr=data.filter(x=>
-  x.date===d && x.mode==="cash"
- );
-
- let incoming=0;
- let outgoing=0;
-
- arr.forEach(x=>{
-
-  let e=cashEffect(x);
-
-  if(e>0)incoming+=e;
-  if(e<0)outgoing+=Math.abs(e);
-
- });
-
- $("cashList").innerHTML=`
-
- <div class="grid">
-  <div class="stat">
-   Cash In
-   <b class="in">${money(incoming)}</b>
-  </div>
-
-  <div class="stat">
-   Cash Out
-   <b class="out">${money(outgoing)}</b>
-  </div>
- </div>
-
- <div class="row">
-  <b>Net Cash</b>
-  <b class="total">${money(incoming-outgoing)}</b>
- </div>
-
- ${transactionRows(arr)}
- `;
-}
-
-function renderBook(mode){
-
- let id=mode==="upi"?"upiList":"bankList";
-
- let arr=data.filter(x=>x.mode===mode);
-
- let incoming=0;
- let outgoing=0;
-
- arr.forEach(x=>{
-
-  let e=cashEffect(x);
-
-  if(e>0)incoming+=e;
-  if(e<0)outgoing+=Math.abs(e);
-
- });
-
- $(id).innerHTML=`
-
- <div class="grid">
-  <div class="stat">
-   In
-   <b class="in">${money(incoming)}</b>
-  </div>
-
-  <div class="stat">
-   Out
-   <b class="out">${money(outgoing)}</b>
-  </div>
- </div>
-
- <div class="row">
-  <b>Net</b>
-  <b class="total">${money(incoming-outgoing)}</b>
- </div>
-
- ${transactionRows(arr)}
- `;
-}
-
-function transactionRows(arr){
-
- if(!arr.length)
-  return '<div class="empty">No Entry</div>';
-
- return arr.slice().reverse().map(x=>`
-
- <div class="row">
-  <div>
-   <b>${esc(x.date)}</b><br>
-   ${esc(x.party)}<br>
-   ${entryName(x.type)}
-  </div>
-
-  <div style="text-align:right">
-   <b>${money(x.amount)}</b><br>
-
-   <button class="small secondary"
-   onclick="editEntry(${x.id})">✏️</button>
-  </div>
- </div>
-
- `).join("");
-}
-
-function renderReport(){
-
- let d=$("reportDate").value||today();
-
- $("reportDate").value=d;
-
- let arr=data.filter(x=>x.date===d);
-
- $("reportList").innerHTML=`
-
- <div class="grid">
-
-  <div class="stat">
-   Sale
-   <b>${money(sumType(arr,"sale"))}</b>
-  </div>
-
-  <div class="stat">
-   Purchase
-   <b>${money(sumType(arr,"purchase"))}</b>
-  </div>
-
-  <div class="stat">
-   Jama
-   <b>${money(sumType(arr,"jama"))}</b>
-  </div>
-
-  <div class="stat">
-   Gaya
-   <b>${money(sumType(arr,"gaya"))}</b>
-  </div>
-
- </div>
-
- ${transactionRows(arr)}
- `;
-}
-
-function renderParties(){
-
- let names=[...new Set(data.map(x=>x.party))]
- .sort();
-
- if(!names.length){
-  $("partiesList").innerHTML=
-  '<div class="empty">No Parties</div>';
-  return;
- }
-
- $("partiesList").innerHTML=names.map(p=>`
-
- <div class="row">
-  <b>${esc(p)}</b>
-
-  <button class="small primary"
-  onclick="openParty('${encodeURIComponent(p)}')">
-  Open
-  </button>
- </div>
-
- `).join("");
-}
-
-function changePin(){
-
- let p=$("newPin").value;
-
- if(!/^\d{4,6}$/.test(p)){
-  alert("4 से 6 digit PIN डालें");
-  return;
- }
-
- PIN=p;
-
- localStorage.setItem(PIN_KEY,PIN);
-
- $("newPin").value="";
-
- alert("PIN Changed ✅");
-}
-
-function backupData(){
-
- let blob=new Blob(
-  [JSON.stringify(data,null,2)],
-  {type:"application/json"}
- );
-
- let url=URL.createObjectURL(blob);
-
- let a=document.createElement("a");
-
- a.href=url;
- a.download="vyapaar-erp-backup.json";
-
- document.body.appendChild(a);
- a.click();
- a.remove();
-
- URL.revokeObjectURL(url);
-}
-
-function clearAllData(){
-
- if(!pinOK())return;
-
- if(!confirm(
- "WARNING: सभी Entries Delete हो जाएंगी. Continue?"
- ))return;
-
- data=[];
-
- save();
-
- alert("All Data Deleted");
-}
-
-
-/* START */
-
-$("date").value=today();
-$("cashDate").value=today();
-$("reportDate").value=today();
-
-setEntryTypes();
-updateHome();
-
-</script>
+<section id="firm" class="hide"><div class="nav"><button class="secondary" onclick="show('home')">← Home</button></div><div class="card"><h2>🏢 Firm / GST</h2><input id="firmName" placeholder="Firm name"><input id="firmGST" placeholder="GSTIN"><input id="firmMobile" placeholder="Mobile"><textarea id="firmAddress" placeholder="Address"></textarea><button class="success" onclick="saveFirm()">💾 Save Firm Details</button></div></section>
 
 </main>
-</body>
-</html>
+<script>
+const K='VYAPAAR_ERP_FINAL';
+let db=JSON.parse(localStorage.getItem(K)||'null')||{entries:[],parties:[],prices:[],items:[],firm:{},invNo:1};
+let lastLedgerPage='home';
+const $=id=>document.getElementById(id);
+const today=()=>new Date().toISOString().slice(0,10);
+const money=n=>'₹'+Number(n||0).toLocaleString('en-IN',{maximumFractionDigits:2});
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
+function save(){localStorage.setItem(K,JSON.stringify(db));updateHome();}
+function show(id){document.querySelectorAll('main>section').forEach(x=>x.classList.add('hide'));$(id).classList.remove('hide');scrollTo(0,0);if(id==='entry'){fillPartyList();setEntryTypes()}if(id==='statement')fillStatementParties();}
+function init(){ $('date').value=today();$('balDate').value=today();updateHome();fillPartyList();setEntryTypes();loadFirm();newInvoice();}
+function setEntryTypes(){let c=$('ptype').value;$('etype').innerHTML=c==='customer'?'<option value="sale">Sale</option><option value="received">Paisa Received</option>':'<option value="purchase">Purchase</option><option value="paid">Supplier Payment';}
+function fillPartyList(){$('partyList').innerHTML=db.parties.map(p=>`<option value="${esc(p.name)}">`).join('');}
+function findParty(n){return db.parties.find(p=>p.name.toLowerCase()===n.toLowerCase())}
+function savePartyFromEntry(){let n=$('party').value.trim();if(!n)return alert('Party name डालें');if(!findParty(n)){db.parties.push({name:n,type:$('ptype').value,mobile:'',address:'',gst:''});save();fillPartyList();}alert('Party saved ✅')}
+function saveParty(){let n=$('newPartyName').value.trim();if(!n)return alert('Party name डालें');let old=findParty(n);if(old){Object.assign(old,{type:$('newPartyType').value,mobile:$('newPartyMobile').value,address:$('newPartyAddress').value,gst:$('newPartyGST').value})}else db.parties.push({name:n,type:$('newPartyType').value,mobile:$('newPartyMobile').value,address:$('newPartyAddress').value,gst:$('newPartyGST').value});save();fillPartyList();renderParties();$('newPartyName').value='';$('newPartyMobile').value='';$('newPartyAddress').value='';$('newPartyGST').value='';alert('Party saved ✅')}
+function addEntry(){let party=$('party').value.trim(),amt=+$('amount').value;if(!party||amt<=0)return alert('Party aur amount डालें');if(!findParty(party))db.parties.push({name:party,type:$('ptype').value,mobile:'',address:'',gst:''});db.entries.push({id:Date.now(),date:$('date').value||today(),partyType:$('ptype').value,party,type:$('etype').value,amount:amt,mode:$('mode').value,gst:$('gstFlag').value==='yes',gstRate:+$('gstRate').value||0,remark:$('remark').value});save();fillPartyList();clearEntry();alert('Entry Saved ✅');show('home')}
+function clearEntry(){$('party').value='';$('amount').value='';$('remark').value='';$('date').value=today()}
+function partyBalance(p,type){let a=db.entries.filter(x=>x.party===p&&x.partyType===type);let b=0;a.forEach(x=>{if(type==='customer')b+=x.type==='sale'?x.amount:x.type==='received'?-x.amount:0;else b+=x.type==='purchase'?x.amount:x.type==='paid'?-x.amount:0});return b}
+function renderPartyLedger(type){let search=$(type==='customer'?'customerSearch':'supplierSearch').value.toLowerCase();let list=db.parties.filter(p=>p.type===type&&p.name.toLowerCase().includes(search));let el=$(type==='customer'?'customerLedgerList':'supplierLedgerList');el.innerHTML=list.length?list.map(p=>`<div class="row"><div><b>${esc(p.name)}</b><br><span class="badge">${type}</span></div><div><b>${money(Math.abs(partyBalance(p.name,type)))}</b><br><button class="small secondary" onclick="openDetail('${esc(p.name)}','${type}')">View</button></div></div>`).join(''):'<div class="empty">No party</div>'}
+function openDetail(p,type){lastLedgerPage=type==='customer'?'customerLedger':'supplierLedger';show('detail');$('detailTitle').textContent='📒 '+p;let a=db.entries.filter(x=>x.party===p&&x.partyType===type);let b=partyBalance(p,type);$('detailList').innerHTML=`<div class="balance">${type==='customer'?(b>=0?'Customer Receivable: ':'Customer Advance: '):(b>=0?'Supplier Payable: ':'Supplier Advance: ')}${money(Math.abs(b))}</div>`+(a.length?`<div class="tablewrap"><table><tr><th>Date</th><th>Type</th><th>Amount</th><th>Mode</th><th>Remark</th></tr>${a.map(x=>`<tr><td>${x.date}</td><td>${x.type}</td><td>${money(x.amount)}</td><td>${x.mode}</td><td>${esc(x.remark)}</td></tr>`).join('')}</table></div>`:'<div class="empty">No entries</div>')}
+function renderCash(){let q=($('cashSearch')?.value||'').toLowerCase();let a=db.entries.filter(x=>x.mode==='cash'&&x.party.toLowerCase().includes(q));let bal=0;a.forEach(x=>bal+=(x.type==='sale'||x.type==='received'?x.type==='sale'?x.amount:x.amount:x.type==='purchase'?-x.amount:x.type==='paid'?x.amount:0));$('cashList').innerHTML=`<div class="balance">Cash movement: ${money(bal)}</div>`+(a.length?`<div class="tablewrap"><table><tr><th>Date</th><th>Party</th><th>Type</th><th>Amount</th></tr>${a.map(x=>`<tr><td>${x.date}</td><td>${esc(x.party)}</td><td>${x.type}</td><td>${money(x.amount)}</td></tr>`).join('')}</table></div>`:'<div class="empty">No cash entries</div>')}
+function fillStatementParties(){$('statementParty').innerHTML='<option value="">Select party</option>'+db.parties.map(p=>`<option>${esc(p.name)}</option>`).join('')}
+function renderStatement(){let p=$('statementParty').value;if(!p){$('statementList').innerHTML='';return}let pt=findParty(p)?.type||'customer';let a=db.entries.filter(x=>x.party===p);let b=partyBalance(p,pt);$('statementList').innerHTML=`<h3>${esc(p)}</h3><div class="balance">Balance: ${money(Math.abs(b))} ${pt==='customer'?(b>=0?'Receivable':'Advance'):b>=0?'Payable':'Advance'}</div><div class="tablewrap"><table><tr><th>Date</th><th>Type</th><th>Debit</th><th>Credit</th><th>Mode</th><th>Remark</th></tr>${a.map(x=>{let debit=(pt==='customer'&&x.type==='sale')||(pt==='supplier'&&x.type==='purchase')?x.amount:0;let credit=(pt==='customer'&&x.type==='received')||(pt==='supplier'&&x.type==='paid')?x.amount:0;return `<tr><td>${x.date}</td><td>${x.type}</td><td>${money(debit)}</td><td>${money(credit)}</td><td>${x.mode}</td><td>${esc(x.remark)}</td></tr>`}).join('')}</table></div>`}
+function printStatement(){if(!$('statementParty').value)return alert('Party select करें');window.print()}
+function addPrice(){let n=$('priceItem').value.trim(),v=+$('priceValue').value;if(!n||v<=0)return alert('Item और price डालें');let x=db.prices.find(x=>x.name.toLowerCase()===n.toLowerCase());if(x)x.price=v;else db.prices.push({name:n,price:v});save();renderPrice()}
+function renderPrice(){$('priceList').innerHTML=db.prices.length?db.prices.map(x=>`<div class="row"><b>${esc(x.name)}</b><b>${money(x.price)}</b></div>`).join(''):'<div class="empty">No price list</div>'}
+$('price').addEventListener('click',renderPrice)
+function addItem(){let n=$('itemName').value.trim(),u=$('itemUnit').value.trim();if(!n)return alert('Item name डालें');db.items.push({name:n,unit:u});save();renderItems();$('itemName').value='';$('itemUnit').value=''}
+function renderItems(){$('itemsList').innerHTML=db.items.length?db.items.map(x=>`<div class="row"><b>${esc(x.name)}</b><span>${esc(x.unit)}</span></div>`).join(''):'<div class="empty">No items</div>'}
+function renderParties(){$('partiesList').innerHTML=db.parties.length?db.parties.map(p=>`<div class="row"><div><b>${esc(p.name)}</b><br>${p.type} ${p.mobile?'• '+esc(p.mobile):''}</div><button class="small secondary" onclick="showPartyStatement('${esc(p.name)}')">Statement</button></div>`).join(''):'<div class="empty">No parties</div>'}
+function showPartyStatement(p){show('statement');fillStatementParties();$('statementParty').value=p;renderStatement()}
+function renderGST(){let a=db.entries.filter(x=>x.gst);let total=a.reduce((s,x)=>s+x.amount,0);$('gstList').innerHTML=`<div class="balance">GST Bill Total: ${money(total)}</div>`+(a.length?`<div class="tablewrap"><table><tr><th>Date</th><th>Party</th><th>Type</th><th>Taxable</th><th>GST %</th><th>GST</th></tr>${a.map(x=>`<tr><td>${x.date}</td><td>${esc(x.party)}</td><td>${x.type}</td><td>${money(x.amount)}</td><td>${x.gstRate}%</td><td>${money(x.amount*x.gstRate/100)}</td></tr>`).join('')}</table></div>`:'<div class="empty">No GST entries</div>')}
+function renderDailyBalance(){let d=$('balDate').value||today(),a=db.entries.filter(x=>x.date===d);let sale=a.filter(x=>x.type==='sale').reduce((s,x)=>s+x.amount,0),pur=a.filter(x=>x.type==='purchase').reduce((s,x)=>s+x.amount,0),rec=a.filter(x=>x.type==='received').reduce((s,x)=>s+x.amount,0),paid=a.filter(x=>x.type==='paid').reduce((s,x)=>s+x.amount,0);let net=rec+sale-pur-paid;$('balanceList').innerHTML=`<div class="grid"><div class="stat">Sale<b>${money(sale)}</b></div><div class="stat">Purchase<b>${money(pur)}</b></div><div class="stat">Received<b>${money(rec)}</b></div><div class="stat">Supplier Paid<b>${money(paid)}</b></div></div><div class="balance">Day Balance: ${money(net)}</div><div class="tablewrap"><table><tr><th>Last column</th><th>Party</th><th>Type</th><th>Amount</th></tr>${a.map(x=>`<tr><td>${x.date}</td><td>${esc(x.party)}</td><td>${x.type}</td><td>${money(x.amount)}</td></tr>`).join('')}</table></div>`}
+function updateHome(){let d=db.entries.filter(x=>x.date===today());let sum=t=>d.filter(x=>x.type===t).reduce((s,x)=>s+x.amount,0);$('hsale').textContent=money(sum('sale'));$('hpurchase').textContent=money(sum('purchase'));$('hreceived').textContent=money(sum('received'));$('hpaid').textContent=money(sum('paid'));$('hgst').textContent=money(d.filter(x=>x.gst).reduce((s,x)=>s+x.amount*x.gstRate/100,0));$('hnet').textContent=money(sum('received')-sum('paid'))}
+function saveFirm(){db.firm={name:$('firmName').value,gst:$('firmGST').value,mobile:$('firmMobile').value,address:$('firmAddress').value};save();alert('Firm details saved')}
+function loadFirm(){let f=db.firm||{};$('firmName').value=f.name||'';$('firmGST').value=f.gst||'';$('firmMobile').value=f.mobile||'';$('firmAddress').value=f.address||''}
+function newInvoice(){$('invNo').value='INV-'+db.invNo;$('invDate').value=today();$('invTable').querySelector('tbody').innerHTML='';addInvoiceRow()}
+function addInvoiceRow(){let tr=document.createElement('tr');tr.innerHTML='<td><input class="ii" placeholder="Item"></td><td><input class="iq" type="number" value="1"></td><td><input class="ir" type="number" value="0"></td><td><input class="ig" type="number" value="18"></td><td class="it">₹0</td><td><button class="small danger" onclick="this.closest(\\'tr\\').remove();calcInv()">×</button></td>';tr.querySelectorAll('input').forEach(x=>x.oninput=calcInv);$('invTable').querySelector('tbody').appendChild(tr);calcInv()}
+function calcInv(){let t=0;document.querySelectorAll('#invTable tbody tr').forEach(r=>{let q=+r.querySelector('.iq').value||0,rate=+r.querySelector('.ir').value||0,g=+r.querySelector('.ig').value||0,v=q*rate*(1+g/100);r.querySelector('.it').textContent=money(v);t+=v});$('invTotal').textContent=money(t)}
+function printInvoice(){calcInv();db.invNo++;save();window.print()}
+init();
+</script>
+</body></html>
